@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# withso.com
 
-## Getting Started
+Marketing site for withso. Built with **Next.js 16 (App Router) + TypeScript + Tailwind CSS v4**.
 
-First, run the development server:
+## Routes
+
+| Path | Page |
+| --- | --- |
+| `/` | Home (hero + ecosystem) |
+| `/legal/privacy-policy` | Privacy Policy |
+| `/legal/terms` | Terms of Service |
+
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun run dev      # http://localhost:3000
+bun run build    # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| What | File |
+| --- | --- |
+| **Home copy + footer (mock data)** | [`lib/site-data.ts`](lib/site-data.ts) |
+| **Legal copy + company info** | [`lib/legal-content.ts`](lib/legal-content.ts) |
+| Brand tokens (colors, fonts, motion) | [`app/globals.css`](app/globals.css) |
+| Root layout (header + footer wrap all pages) | [`app/layout.tsx`](app/layout.tsx) |
+| Home composition | [`app/page.tsx`](app/page.tsx) |
+| Top navigation | [`components/site-header.tsx`](components/site-header.tsx) |
+| Minimal footer | [`components/site-footer.tsx`](components/site-footer.tsx) |
+| Hero headline | [`components/hero.tsx`](components/hero.tsx) |
+| "Three groups" org diagram | [`components/ecosystem.tsx`](components/ecosystem.tsx) |
+| Legal page renderer | [`components/legal-page.tsx`](components/legal-page.tsx) |
+| Logo (withso wordmark) | [`components/logo.tsx`](components/logo.tsx) |
+| Product / social icons / arrows | [`components/icons.tsx`](components/icons.tsx) |
+| Status badges (Live/Preview) | [`components/status-badge.tsx`](components/status-badge.tsx) |
+| Item rows + buttons | [`components/item-row.tsx`](components/item-row.tsx), [`components/button.tsx`](components/button.tsx) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> Content is intentionally separated into data files so copy can be iterated
+> without touching components. Company specifics for the legal pages (entity,
+> email, address, jurisdiction, effective date) live in one `legalMeta` block.
 
-## Learn More
+## Brand
 
-To learn more about Next.js, take a look at the following resources:
+- Background `#f7f6f2` (withso cream) · Ink `#221e1c` (withso wordmark) · Muted `#6f6a64`
+- Red `#ed1c24` retained as the "Live" badge accent
+- Type: **Hanken Grotesk** (geometric grotesque, heavy display weights)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Note on legal pages
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The Privacy Policy and Terms are an original, professionally-structured
+**starting template** — not copied from any source and **not legal advice**.
+Review with counsel and fill the `[Add your registered business address]`
+placeholder (and confirm the legal entity name) in `lib/legal-content.ts`
+before publishing.

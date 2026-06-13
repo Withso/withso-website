@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------ */
+/*  Skcript brand tokens                                              */
+/* ------------------------------------------------------------------ */
+@theme {
+  --color-bg: #f7f6f2; /* withso.com warm off-white */
+  --color-ink: #221e1c; /* withso logo near-black — headings / wordmark */
+  --color-ink-soft: #2a2623; /* strong body */
+  --color-muted: #6f6a64; /* body copy */
+  --color-faint: #a39e95; /* eyebrows / labels */
+
+  --color-line: #ececed; /* hairlines */
+  --color-line-strong: #e0e1e4; /* card borders */
+
+  --color-card: #ffffff;
+  --color-card-tint: #fcfcfd;
+
+  --color-brand: #ed1c24; /* skcript red */
+  --color-brand-ink: #d4141b;
+  --color-brand-soft: #fde7e8; /* LIVE badge bg */
+
+  --color-chip: #f1f2f4; /* PREVIEW badge bg */
+  --color-chip-strong: #e6e7ea; /* INTERNAL PREVIEW badge bg */
+  --color-chip-ink: #74787f; /* badge text (neutral) */
+
+  --color-accent-orange: #f4521e; /* SupportWire mark */
+  --color-accent-blue: #2f7df6; /* FeatureOS mark */
+
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-row: 0.875rem;
+
+  --shadow-row: 0 1px 2px rgba(16, 18, 22, 0.04),
+    0 1px 1px rgba(16, 18, 22, 0.03);
+  --shadow-pop: 0 14px 40px -18px rgba(16, 18, 22, 0.22);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ------------------------------------------------------------------ */
+/*  Base                                                              */
+/* ------------------------------------------------------------------ */
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 4rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv01";
+  text-rendering: optimizeLegibility;
+}
+
+/* Monospace utility — eyebrows, labels, section numbers (engineered feel). */
+.mono {
+  font-family: var(--font-dm-mono), ui-monospace, "SFMono-Regular", Menlo,
+    monospace;
+  font-feature-settings: normal;
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Motion                                                            */
+/* ------------------------------------------------------------------ */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* On-load staggered reveal (logo, tagline, CTA, cards) */
+  .rise {
+    opacity: 0;
+    animation: rise 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
 }
