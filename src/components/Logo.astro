@@ -1,0 +1,25 @@
+---
+import source from '../assets/withso-logo.svg?raw';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+// Inline the supplied wordmark so it inherits text colour and can be sized by height.
+const paths = source
+  .replace(/^[\s\S]*?<svg[^>]*>/, '')
+  .replace(/<\/svg>\s*$/, '')
+  .replace(/\s*fill="#221E1C"/g, '')
+  .trim();
+---
+
+<svg
+  class:list={['logo', className]}
+  viewBox="65 139 871 217"
+  fill="currentColor"
+  aria-hidden="true"
+  focusable="false"
+  set:html={paths}
+/>

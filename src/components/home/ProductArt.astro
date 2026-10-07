@@ -1,0 +1,115 @@
+---
+interface Props {
+  kind: 'mapsmith' | 'jurisfield';
+}
+
+const { kind } = Astro.props;
+const graticule = Array.from({ length: 15 }, (_, i) => (i + 1) * 20);
+---
+
+{
+  kind === 'mapsmith' ? (
+    <svg viewBox="0 0 320 180" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
+      <rect width="320" height="180" fill="#f2f6f5" />
+      <g stroke="#fff" stroke-width="1.5">
+        <path d="M0 0H112L98 50L132 84L108 130L56 138L0 116Z" fill="#cfe9e5" />
+        <path d="M112 0H232L218 38L242 90L192 108L132 84L98 50Z" fill="#9fd6cf" />
+        <path d="M232 0H320V94L280 116L242 90L218 38Z" fill="#e3f1ef" />
+        <path d="M0 116L56 138L108 130L132 84L192 108L208 180H0Z" fill="#73c4b9" />
+        <path d="M192 108L242 90L280 116L320 94V180H208Z" fill="#bfe3dd" />
+      </g>
+      <path
+        d="M-8 66C36 58 66 98 116 94S186 58 228 78 288 128 330 118"
+        fill="none"
+        stroke="#4B5FD3"
+        stroke-opacity=".22"
+        stroke-width="8"
+        stroke-linecap="round"
+      />
+      <path d="M-8 66C36 58 66 98 116 94S186 58 228 78 288 128 330 118" fill="none" stroke="#4B5FD3" stroke-opacity=".6" />
+      <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
+        <path d="M40 -4L70 70L150 92L196 150L214 184" />
+        <path d="M-4 150L90 120L166 128L252 70L324 52" />
+      </g>
+      <g class="art-pulse" fill="#20A39A" fill-opacity=".14" stroke="#20A39A" stroke-dasharray="3 3">
+        <circle cx="74" cy="64" r="20" />
+        <circle cx="166" cy="128" r="20" />
+        <circle cx="252" cy="70" r="20" />
+      </g>
+      <g fill="#10231F" stroke="#fff" stroke-width="1.5">
+        <circle cx="74" cy="64" r="4" />
+        <circle cx="166" cy="128" r="4" />
+        <circle cx="252" cy="70" r="4" />
+        <circle cx="122" cy="40" r="3" />
+        <circle cx="206" cy="58" r="3" />
+        <circle cx="286" cy="140" r="3" />
+        <circle cx="36" cy="146" r="3" />
+      </g>
+      <g transform="translate(12 12)">
+        <rect width="86" height="50" rx="3" fill="#fff" stroke="#dbe5e3" />
+        <rect x="9" y="10" width="30" height="4" rx="1" fill="#10231F" fill-opacity=".8" />
+        <rect x="9" y="22" width="8" height="8" fill="#73c4b9" />
+        <rect x="22" y="24" width="42" height="4" rx="1" fill="#c9d4d2" />
+        <rect x="9" y="34" width="8" height="8" fill="#cfe9e5" />
+        <rect x="22" y="36" width="30" height="4" rx="1" fill="#c9d4d2" />
+      </g>
+      <g transform="translate(292 12)">
+        <rect width="16" height="32" rx="2" fill="#fff" stroke="#dbe5e3" />
+        <path d="M5 9h6M8 6v6M5 24h6" stroke="#10231F" stroke-width="1.2" />
+      </g>
+    </svg>
+  ) : (
+    <svg viewBox="0 0 320 180" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
+      <rect width="320" height="180" fill="#113B2B" />
+      <g stroke="#fff" stroke-opacity=".06">
+        {graticule.map((x) => (
+          <path d={`M${x} 0V180`} />
+        ))}
+        {graticule.slice(0, 8).map((y) => (
+          <path d={`M0 ${y}H320`} />
+        ))}
+      </g>
+      <path
+        d="M162 58 202 48 216 84 198 122 160 108 148 84Z"
+        fill="none"
+        stroke="#D7F24A"
+        stroke-opacity=".3"
+        stroke-dasharray="3 3"
+      />
+      <path
+        d="M28 40 52 22 96 18 120 34 150 30 162 58 148 84 160 108 138 132 104 138 78 154 52 138 22 130 18 98 30 76Z"
+        fill="#D7F24A"
+        fill-opacity=".07"
+        stroke="#D7F24A"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      />
+      <path d="M44 64v-12h12M136 112v12h-12" fill="none" stroke="#D7F24A" stroke-width="1.5" />
+      <g class="art-pulse">
+        <circle cx="92" cy="84" r="20" fill="#D7F24A" fill-opacity=".08" stroke="#D7F24A" stroke-opacity=".55" stroke-dasharray="2 3" />
+      </g>
+      <circle cx="92" cy="84" r="4.5" fill="#D7F24A" />
+      <g transform="translate(222 17)">
+        <rect width="80" height="146" rx="13" fill="#0b2a1f" stroke="#fff" stroke-opacity=".22" />
+        <rect x="30" y="7" width="20" height="4" rx="2" fill="#fff" fill-opacity=".18" />
+        <rect x="10" y="22" width="44" height="5" rx="1" fill="#fff" fill-opacity=".85" />
+        <rect x="10" y="32" width="30" height="4" rx="1" fill="#fff" fill-opacity=".35" />
+        <g fill="#fff" fill-opacity=".05" stroke="#fff" stroke-opacity=".14">
+          <rect x="10" y="46" width="60" height="16" rx="3" />
+          <rect x="10" y="68" width="60" height="16" rx="3" />
+          <rect x="10" y="90" width="60" height="16" rx="3" />
+        </g>
+        <g fill="#fff" fill-opacity=".5">
+          <rect x="16" y="52" width="22" height="4" rx="1" />
+          <rect x="16" y="74" width="28" height="4" rx="1" />
+          <rect x="16" y="96" width="18" height="4" rx="1" />
+        </g>
+        <g fill="none" stroke="#D7F24A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m58 54 2.5 2.5 4.5-5M58 76l2.5 2.5 4.5-5M58 98l2.5 2.5 4.5-5" />
+        </g>
+        <rect x="10" y="118" width="60" height="16" rx="3" fill="#D7F24A" />
+        <rect x="26" y="124" width="28" height="4" rx="1" fill="#113B2B" />
+      </g>
+    </svg>
+  )
+}

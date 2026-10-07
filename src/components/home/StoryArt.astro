@@ -1,0 +1,158 @@
+---
+export type StoryKind = 'mapsmith' | 'jurisfield' | 'development' | 'nammatn' | 'zeros' | 'about';
+
+interface Props {
+  kind: StoryKind;
+}
+
+const { kind } = Astro.props;
+
+// An abstract region for the dot matrix (not a geographic outline).
+const blob = Array.from({ length: 56 }, (_, i) => {
+  const a = (i / 56) * Math.PI * 2;
+  const r = 1 + 0.08 * Math.sin(a * 3 + 0.6) + 0.05 * Math.cos(a * 5);
+  const x = 205 + Math.sign(Math.cos(a)) * Math.abs(Math.cos(a)) ** 0.8 * 150 * r;
+  const y = 126 + Math.sign(Math.sin(a)) * Math.abs(Math.sin(a)) ** 0.9 * 98 * r;
+  return `${i === 0 ? 'M' : 'L'}${Math.round(x)} ${Math.round(y)}`;
+}).join('') + 'Z';
+const hot = [
+  { x: 112, y: 85 },
+  { x: 157, y: 148 },
+  { x: 211, y: 103 },
+  { x: 256, y: 166 },
+  { x: 301, y: 112 },
+];
+
+const branches = [
+  { from: 70, y: 104, end: 300 },
+  { from: 120, y: 142, end: 342 },
+  { from: 170, y: 180, end: 318 },
+  { from: 220, y: 218, end: 356 },
+];
+---
+
+{
+  kind === 'mapsmith' && (
+    <svg viewBox="0 0 400 250" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="story-mapsmith-dots" width="7" height="7" patternUnits="userSpaceOnUse">
+          <circle cx="1.5" cy="1.5" r="1" fill="#20A39A" />
+        </pattern>
+      </defs>
+      <rect width="400" height="250" fill="#131716" />
+      <path d="M70 182 200 130 330 182 200 234Z" fill="#131716" stroke="#fff" stroke-opacity=".28" />
+      <g fill="none" stroke="#fff" stroke-opacity=".42">
+        <path d="M112 186 176 160 232 172 288 150" />
+        <path d="M140 204 212 176 266 196" />
+      </g>
+      <path d="M70 134 200 82 330 134 200 186Z" fill="#131716" stroke="#fff" stroke-opacity=".42" />
+      <path d="M136 134 196 108 244 124 222 154 164 158Z" fill="#4B5FD3" fill-opacity=".6" />
+      <path d="M232 112 262 102 286 120 262 132Z" fill="#4B5FD3" fill-opacity=".35" />
+      <path d="M70 86 200 34 330 86 200 138Z" fill="#131716" stroke="#fff" stroke-opacity=".75" />
+      <path d="M70 86 200 34 330 86 200 138Z" fill="url(#story-mapsmith-dots)" fill-opacity=".55" />
+      <g fill="#fff">
+        <circle cx="168" cy="80" r="3" />
+        <circle cx="230" cy="92" r="3" />
+        <circle cx="196" cy="62" r="3" />
+      </g>
+      <g stroke="#fff" stroke-opacity=".3" stroke-dasharray="2 4">
+        <path d="M200 138V186M200 186V234" />
+      </g>
+    </svg>
+  )
+}
+{
+  kind === 'jurisfield' && (
+    <svg viewBox="0 0 400 250" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
+      <rect width="400" height="250" fill="#0e271d" />
+      <g stroke="#fff" stroke-opacity=".05">
+        <path d="M0 50H400M0 100H400M0 150H400M0 200H400M80 0V250M160 0V250M240 0V250M320 0V250" />
+      </g>
+      <path
+        d="M70 70 108 38 176 30 214 56 268 48 300 92 282 128 304 166 266 204 210 212 166 232 120 210 70 198 58 150 78 114Z"
+        fill="none"
+        stroke="#D7F24A"
+        stroke-width="1.6"
+        stroke-linejoin="round"
+      />
+      <path d="M120 112 176 86 226 106 230 152 180 176 128 160Z" fill="#D7F24A" fill-opacity=".08" stroke="#D7F24A" stroke-opacity=".45" stroke-dasharray="4 4" />
+      <circle cx="180" cy="130" r="30" fill="none" stroke="#D7F24A" stroke-opacity=".35" stroke-dasharray="2 4" />
+      <circle cx="180" cy="130" r="5" fill="#D7F24A" />
+      <path d="M180 92v14M180 154v14M142 130h14M204 130h14" stroke="#D7F24A" stroke-opacity=".8" />
+      <text x="28" y="230" fill="#D7F24A" fill-opacity=".8" style="font: 500 10px var(--font-mono); letter-spacing: .08em">
+        JF–0248 · SYNCED
+      </text>
+    </svg>
+  )
+}
+{kind === 'development' && <img src="/assets/terrain-story.svg" alt="" width="400" height="250" loading="lazy" decoding="async" />}
+{
+  kind === 'nammatn' && (
+    <svg viewBox="0 0 400 250" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="story-nammatn-dots" width="9" height="9" patternUnits="userSpaceOnUse">
+          <circle cx="4.5" cy="4.5" r="1.6" fill="#3a3834" fill-opacity=".34" />
+        </pattern>
+        <clipPath id="story-nammatn-region">
+          <path d={blob} />
+        </clipPath>
+      </defs>
+      <rect width="400" height="250" fill="#e8e6e1" />
+      <rect width="400" height="250" fill="url(#story-nammatn-dots)" clip-path="url(#story-nammatn-region)" />
+      <path
+        d={hot.map((dot, i) => `${i === 0 ? 'M' : 'L'}${dot.x} ${dot.y}`).join('')}
+        fill="none"
+        stroke="#d86a3d"
+        stroke-opacity=".6"
+        stroke-dasharray="3 3"
+      />
+      {hot.map((dot) => (
+        <g>
+          <circle cx={dot.x} cy={dot.y} r="7" fill="none" stroke="#d86a3d" stroke-opacity=".5" />
+          <circle cx={dot.x} cy={dot.y} r="3" fill="#d86a3d" />
+        </g>
+      ))}
+    </svg>
+  )
+}
+{
+  kind === 'zeros' && (
+    <svg viewBox="0 0 400 250" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
+      <rect width="400" height="250" fill="#121212" />
+      <path d="M28 60H372" stroke="#fff" stroke-opacity=".7" />
+      {branches.map((branch, i) => (
+        <g>
+          <path
+            d={`M${branch.from} 60C${branch.from + 26} 60 ${branch.from + 18} ${branch.y} ${branch.from + 44} ${branch.y}H${branch.end}`}
+            fill="none"
+            stroke={i === 1 ? '#8c95ff' : '#fff'}
+            stroke-opacity={i === 1 ? 0.95 : 0.45}
+          />
+          <rect x={branch.end - 3} y={branch.y - 3} width="6" height="6" fill={i === 1 ? '#8c95ff' : '#fff'} />
+          <rect x={branch.from + 90} y={branch.y - 2.5} width="5" height="5" fill="#121212" stroke="#fff" stroke-opacity=".6" />
+        </g>
+      ))}
+      {[28, 70, 120, 170, 220, 300, 372].map((x) => (
+        <rect x={x - 3} y="57" width="6" height="6" fill="#fff" />
+      ))}
+    </svg>
+  )
+}
+{
+  kind === 'about' && (
+    <svg viewBox="0 0 400 250" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid slice">
+      <rect width="400" height="250" fill="#e8e6e1" />
+      <g stroke="#171614" stroke-opacity=".08">
+        <path d="M0 50H400M0 100H400M0 150H400M0 200H400M50 0V250M100 0V250M150 0V250M200 0V250M250 0V250M300 0V250M350 0V250" />
+      </g>
+      <path d="M0 132H400M236 0V250" stroke="#171614" stroke-opacity=".7" />
+      <circle cx="236" cy="132" r="24" fill="none" stroke="#2d3cf0" stroke-width="1.5" />
+      <circle cx="236" cy="132" r="3.5" fill="#2d3cf0" />
+      <text x="248" y="122" fill="#171614" style="font: 500 11px var(--font-mono)">13.0827° N</text>
+      <text x="248" y="152" fill="#171614" style="font: 500 11px var(--font-mono)">80.2707° E</text>
+      <text x="24" y="226" fill="#171614" fill-opacity=".6" style="font: 500 10px var(--font-mono); letter-spacing: .1em">
+        CHENNAI · INDIA
+      </text>
+    </svg>
+  )
+}

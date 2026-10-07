@@ -1,0 +1,392 @@
+---
+import ProductLayout from '../layouts/ProductLayout.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/product/Faq.astro';
+import FeatureIcon, { type FeatureIconName } from '../components/product/FeatureIcon.astro';
+import MapsmithArt, { type MapsmithArtKind } from '../components/product/MapsmithArt.astro';
+import Marquee from '../components/product/Marquee.astro';
+import MapsmithWorkspace from '../components/islands/MapsmithWorkspace';
+import { mailto, requestAccess } from '../data/site';
+
+const features: { icon: FeatureIconName; title: string; text: string; chips: string[] }[] = [
+  {
+    icon: 'layers',
+    title: 'Bring in your data',
+    text: 'Upload spatial files and each one becomes a layer, with its attributes intact and ready to style, filter and analyse.',
+    chips: ['GeoJSON', 'CSV', 'Shapefile', 'GeoPackage'],
+  },
+  {
+    icon: 'map',
+    title: 'Make maps that explain',
+    text: 'Style by category or graduated values, or show density as a heatmap. Add labels, pop-ups, bookmarks and filters.',
+    chips: ['Categories', 'Graduated', 'Heatmap'],
+  },
+  {
+    icon: 'analysis',
+    title: 'Run spatial analysis',
+    text: 'Buffer, clip, intersect, dissolve, join by location and summarize within areas. Every result is saved as a new layer.',
+    chips: ['Buffer', 'Spatial join', 'Summarize'],
+  },
+  {
+    icon: 'dashboard',
+    title: 'Publish dashboards',
+    text: 'Combine maps, indicators, charts and tables on one or more pages, so people can read the answer without opening a GIS.',
+    chips: ['Indicators', 'Charts', 'Tables'],
+  },
+  {
+    icon: 'team',
+    title: 'Share with the right people',
+    text: 'Keep work private, share it with your organisation and teams, or make it public. Comments keep feedback next to the map.',
+    chips: ['Private', 'Organisation', 'Public'],
+  },
+  {
+    icon: 'view',
+    title: 'Explore public content',
+    text: 'Public maps, layers and dashboards are listed on Explore, where anyone can open them without signing in.',
+    chips: ['Explore'],
+  },
+];
+
+const tools = [
+  { title: 'Buffer', text: 'Analysis' },
+  { title: 'Clip', text: 'Analysis' },
+  { title: 'Intersect', text: 'Analysis' },
+  { title: 'Dissolve', text: 'Analysis' },
+  { title: 'Spatial join', text: 'Analysis' },
+  { title: 'Summarize within', text: 'Analysis' },
+  { title: 'Categories', text: 'Styling' },
+  { title: 'Graduated colours', text: 'Styling' },
+  { title: 'Heatmaps', text: 'Styling' },
+  { title: 'Labels and pop-ups', text: 'Styling' },
+  { title: 'Bookmarks', text: 'Maps' },
+  { title: 'Filters', text: 'Maps' },
+  { title: 'Multi-page dashboards', text: 'Dashboards' },
+];
+
+const uses: { id: MapsmithArtKind; title: string; text: string; tools: string }[] = [
+  {
+    id: 'coverage',
+    title: 'Service coverage',
+    text: 'See which neighbourhoods are within reach of clinics, schools or offices, and where the gaps are.',
+    tools: 'Buffer → Summarize within → Dashboard',
+  },
+  {
+    id: 'assets',
+    title: 'Asset inventories',
+    text: 'Keep pipes, poles, parcels or sites as layers that your whole team can filter, inspect and query.',
+    tools: 'Import → Filter → Pop-ups → API',
+  },
+  {
+    id: 'observations',
+    title: 'Environmental observations',
+    text: 'Map readings and events as layers, then find where they cluster with heatmaps and graduated styles.',
+    tools: 'Import → Heatmap → Graduated styles',
+  },
+  {
+    id: 'public',
+    title: 'Public information',
+    text: 'Publish a map or dashboard that residents, partners or the press can open without an account.',
+    tools: 'Dashboard → Public sharing → Explore',
+  },
+];
+
+const developer: { icon: FeatureIconName; kicker: string; title: string; text: string }[] = [
+  {
+    icon: 'code',
+    kicker: 'GeoJSON',
+    title: 'Query features',
+    text: 'Request the features of a layer as GeoJSON for your own applications, scripts and reports.',
+  },
+  {
+    icon: 'layers',
+    kicker: 'Vector tiles · Styles',
+    title: 'Serve maps anywhere',
+    text: 'Stream layers as vector tiles and reuse the styles you designed, so maps look the same outside Mapsmith.',
+  },
+  {
+    icon: 'key',
+    kicker: 'Access',
+    title: 'Scoped API keys',
+    text: 'Create keys that carry only the access an integration needs, and revoke them when it no longer does.',
+  },
+  {
+    icon: 'terminal',
+    kicker: 'TypeScript · Terminal',
+    title: 'SDK and CLI',
+    text: 'Script uploads and automate routine work from TypeScript code or from the command line.',
+  },
+];
+
+const steps = [
+  { title: 'Deploy', text: 'Run Mapsmith with Docker on servers you choose.' },
+  { title: 'Sign in', text: 'An administrator creates accounts. Keycloak handles sign-in.' },
+  { title: 'Store', text: 'Layers and analysis results live in PostGIS, a database you control.' },
+  { title: 'Share', text: 'Keep work private, share it inside your organisation or publish it to Explore.' },
+];
+
+const stack = [
+  { title: 'PostGIS', text: 'Spatial database' },
+  { title: 'Go', text: 'Services and API' },
+  { title: 'Angular', text: 'Web application' },
+  { title: 'MapLibre', text: 'Map rendering' },
+  { title: 'Keycloak', text: 'Identity and sign-in' },
+  { title: 'Docker', text: 'Deployment' },
+];
+
+const faq = [
+  {
+    q: 'What is Mapsmith?',
+    a: '<p>Mapsmith is a web GIS: a geographic workspace that runs in the browser. You can bring in spatial data as layers, style maps, run spatial analysis, build dashboards and share the results, without installing desktop GIS software.</p>',
+  },
+  {
+    q: 'Which data formats can I import?',
+    a: '<p>GeoJSON, CSV files with coordinate columns, zipped Shapefiles and GeoPackages. Each upload becomes a layer with its attributes, which you can style, filter, analyse and share.</p>',
+  },
+  {
+    q: 'What spatial analysis can I run?',
+    a: '<p>Buffers, clip, intersect, dissolve, spatial joins and summarize within. Results are saved as new layers, so you can map them, use them in a dashboard or analyse them further.</p>',
+  },
+  {
+    q: 'Who can see my maps and dashboards?',
+    a: '<p>You decide. Content can stay private, be shared with your organisation or teams, or be made public. Public content is listed on Explore, where anyone can open it without an account.</p>',
+  },
+  {
+    q: 'How do people get an account?',
+    a: `<p>Accounts are created by an administrator, so access stays under your organisation’s control. Public content on Explore is open to everyone. <a href="${requestAccess('Mapsmith')}">Request access</a> for your team by email.</p>`,
+  },
+  {
+    q: 'Can we host Mapsmith ourselves?',
+    a: `<p>Yes. Mapsmith is self-hosted and backed by PostGIS, and it runs with Docker. It is built with Angular, Go, MapLibre and Keycloak. <a href="${mailto('Mapsmith deployment')}">Talk to us</a> about planning and supporting a deployment.</p>`,
+  },
+  {
+    q: 'Can I work with Mapsmith from code?',
+    a: '<p>Yes. The API provides GeoJSON queries, vector tiles and map styles, secured with scoped API keys. A TypeScript SDK and a command-line tool help you script uploads and automate routine work.</p>',
+  },
+  {
+    q: 'How does Mapsmith relate to JurisField?',
+    a: '<p>They are separate Withso products that handle the same kind of data. Mapsmith is for analysing and publishing spatial data. <a href="/jurisfield">JurisField</a> is for collecting verified records in the field. Both work with standard formats such as GeoJSON.</p>',
+  },
+];
+---
+
+<ProductLayout
+  title="Mapsmith — Web GIS for spatial data, maps, analysis and dashboards"
+  description="Mapsmith is a geographic workspace in the browser. Import spatial data, style maps, run analysis and publish dashboards for your team or the public."
+  path="/mapsmith"
+  product="mapsmith"
+  productName="Mapsmith"
+  themeColor="#fafaf9"
+>
+  <section class="p-container p-hero" aria-labelledby="hero-title">
+    <div data-reveal>
+      <h1 class="p-hero__title" id="hero-title">
+        <img src="/assets/mapsmith.svg" alt="" width="64" height="64" />
+        Mapsmith
+      </h1>
+      <p class="p-hero__lede">
+        <strong>Your geographic workspace, in the browser.</strong> Bring in spatial data, make maps, run analysis and publish
+        dashboards, then share what you find with your team or the public.
+      </p>
+      <div class="p-hero__actions">
+        <a class="p-btn p-btn--primary" href={requestAccess('Mapsmith')}>Request access</a>
+        <a class="p-btn p-btn--secondary" href="#platform">See how it works <Icon name="arrow-right" /></a>
+      </div>
+    </div>
+    <a class="p-callout" href="#deploy" data-reveal style="--reveal-delay: 120ms">
+      <span>Self-hosted · PostGIS-backed</span>
+      <span>Runs on your infrastructure <Icon name="arrow-right" /></span>
+    </a>
+  </section>
+
+  <section class="p-container" aria-label="Interactive sample workspace">
+    <div class="p-stage" data-reveal>
+      <MapsmithWorkspace client:visible />
+      <p class="p-stage__note">Interactive sample · Try the Map, Analysis and Dashboard tabs · Illustrative data, not a real place</p>
+    </div>
+  </section>
+
+  <section class="p-container p-section" id="platform" aria-labelledby="platform-title">
+    <div class="p-split" data-reveal>
+      <div>
+        <p class="p-eyebrow">Platform</p>
+        <h2 class="p-h2" id="platform-title">
+          From a spatial file to a shared answer, <span class="soft">without leaving the browser.</span>
+        </h2>
+      </div>
+      <div class="p-split__aside">
+        <p class="p-text">
+          Layers, maps, analysis and dashboards live in one workspace, so the people who prepare spatial data and the people
+          who need its answers work from the same source.
+        </p>
+        <div class="p-links">
+          <a href={requestAccess('Mapsmith')}>Request access <Icon name="arrow-right" /></a>
+          <a href="#developers">API and SDK <Icon name="arrow-right" /></a>
+        </div>
+      </div>
+    </div>
+    <ul class="p-cards" role="list">
+      {
+        features.map((feature, i) => (
+          <li class="p-card" data-reveal style={`--reveal-delay:${(i % 3) * 70}ms`}>
+            <FeatureIcon name={feature.icon} />
+            <h3>{feature.title}</h3>
+            <p>{feature.text}</p>
+            <div class="p-chips">
+              {feature.chips.map((chip) => (
+                <span class="p-chip">{chip}</span>
+              ))}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="p-marquees" data-reveal>
+      <Marquee label="Tools in the workspace" items={tools} duration={60} />
+    </div>
+  </section>
+
+  <section class="p-container p-section" aria-labelledby="uses-title">
+    <div class="p-split" data-reveal>
+      <div>
+        <p class="p-eyebrow">Use cases</p>
+        <h2 class="p-h2" id="uses-title">For questions that start with <span class="soft">“where”.</span></h2>
+      </div>
+      <div class="p-split__aside">
+        <p class="p-text">
+          The same tools serve planning, operations and public information. Here are a few ways teams combine them.
+        </p>
+      </div>
+    </div>
+    <div class="p-flow" data-tabs data-reveal>
+      <div class="p-flow__tabs" role="tablist" aria-label="Mapsmith use cases">
+        {
+          uses.map((use, i) => (
+            <button
+              class="p-flow__tab"
+              type="button"
+              role="tab"
+              id={`use-tab-${use.id}`}
+              aria-controls={`use-panel-${use.id}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              tabindex={i === 0 ? 0 : -1}
+            >
+              <span>{String(i + 1).padStart(2, '0')}</span>
+              <strong>{use.title}</strong>
+              <small>{use.text}</small>
+            </button>
+          ))
+        }
+      </div>
+      {
+        uses.map((use, i) => (
+          <div
+            class="p-flow__panel"
+            role="tabpanel"
+            id={`use-panel-${use.id}`}
+            aria-labelledby={`use-tab-${use.id}`}
+            tabindex="0"
+            hidden={i !== 0}
+          >
+            <div class="p-flow__art">
+              <MapsmithArt kind={use.id} />
+            </div>
+            <p class="p-flow__out">
+              <span>
+                Workflow · <b>{use.tools}</b>
+              </span>
+              <span>Illustration · sample data</span>
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="p-container p-section" id="developers" aria-labelledby="developers-title">
+    <div class="p-split" data-reveal>
+      <div>
+        <p class="p-eyebrow">Developers</p>
+        <h2 class="p-h2" id="developers-title">Every layer is <span class="soft">an API away.</span></h2>
+      </div>
+      <div class="p-split__aside">
+        <p class="p-text">
+          Use Mapsmith as the source of truth for spatial data in your own systems: query it, render it and automate it, with
+          access you control.
+        </p>
+      </div>
+    </div>
+    <ul class="p-cards p-cards--4" role="list">
+      {
+        developer.map((item, i) => (
+          <li class="p-card" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+            <FeatureIcon name={item.icon} />
+            <span class="p-card__kicker">{item.kicker}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="p-container p-section" id="deploy" aria-labelledby="deploy-title">
+    <div class="p-split" data-reveal>
+      <div>
+        <p class="p-eyebrow">Deployment</p>
+        <h2 class="p-h2" id="deploy-title">Runs on your infrastructure, <span class="soft">built from open parts.</span></h2>
+      </div>
+      <div class="p-split__aside">
+        <p class="p-text">
+          Mapsmith is self-hosted, so your spatial data stays where you decide. Withso can help plan, deploy and support an
+          installation.
+        </p>
+        <div class="p-links">
+          <a href={mailto('Mapsmith deployment')}>Talk to us about deployment <Icon name="arrow-right" /></a>
+        </div>
+      </div>
+    </div>
+    <ol class="p-steps" role="list" style="--steps: 4" data-reveal>
+      {
+        steps.map((step, i) => (
+          <li class="p-step" style={`--i:${i}`}>
+            <span class="p-step__n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="p-marquees" data-reveal>
+      <Marquee label="Built with" items={stack} reverse duration={40} />
+    </div>
+  </section>
+
+  <Faq items={faq} subject="Mapsmith question" />
+
+  <section class="p-container p-section" aria-label="Related product">
+    <a class="p-cross" href="/jurisfield" data-reveal>
+      <div>
+        <span class="p-cross__brand">
+          <img src="/assets/jurisfield.svg" alt="" width="24" height="24" />
+          JurisField
+        </span>
+        <h2>Need verified records from the field?</h2>
+        <p>
+          JurisField turns layers, forms and work areas into offline-ready assignments, and returns every record with its
+          location and evidence.
+        </p>
+      </div>
+      <span class="p-cross__go" aria-hidden="true"><Icon name="arrow-right" /></span>
+    </a>
+  </section>
+
+  <section class="p-container p-cta" aria-labelledby="cta-title" data-reveal>
+    <p class="p-eyebrow">Get started</p>
+    <h2 id="cta-title">Bring your own data and see it on a map.</h2>
+    <p>Request access for your team, or talk to us about accounts and a deployment for your organisation.</p>
+    <div class="p-hero__actions">
+      <a class="p-btn p-btn--primary" href={requestAccess('Mapsmith')}>Request access</a>
+      <a class="p-btn p-btn--secondary" href={mailto('Mapsmith enquiry')}>Talk to us</a>
+    </div>
+  </section>
+</ProductLayout>

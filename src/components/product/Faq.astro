@@ -1,0 +1,31 @@
+---
+import Icon from '../Icon.astro';
+import { mailto } from '../../data/site';
+
+interface Props {
+  items: { q: string; a: string }[];
+  subject: string;
+}
+
+const { items, subject } = Astro.props;
+---
+
+<section class="p-container p-section" aria-labelledby="faq-title">
+  <div class="p-faq" data-reveal>
+    <div class="p-faq__head">
+      <h2 id="faq-title">Frequently asked questions</h2>
+      <p>Something else? <a href={mailto(subject)}>Email our team</a></p>
+    </div>
+    {
+      items.map((item) => (
+        <details>
+          <summary>
+            {item.q}
+            <Icon name="plus" />
+          </summary>
+          <div class="p-faq__answer" set:html={item.a} />
+        </details>
+      ))
+    }
+  </div>
+</section>

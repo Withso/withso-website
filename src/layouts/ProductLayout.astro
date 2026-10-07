@@ -1,0 +1,89 @@
+---
+import '../styles/product.css';
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import Logo from '../components/Logo.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { mailto, requestAccess } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  product: 'mapsmith' | 'jurisfield';
+  productName: string;
+  themeColor: string;
+}
+
+const { title, description, path, product, productName, themeColor } = Astro.props;
+
+const nav = [
+  { href: '/', label: 'Home' },
+  { href: '/mapsmith', label: 'Mapsmith' },
+  { href: '/jurisfield', label: 'JurisField' },
+  { href: '/about', label: 'About' },
+];
+---
+
+<BaseLayout {title} {description} {path} {themeColor} bodyClass={`theme-product theme-${product}`}>
+  <div class="p-page">
+    <header class="p-header" data-header data-menu>
+      <div class="p-container p-header__inner">
+        <a class="p-header__brand" href="/" aria-label="Withso home"><Logo /></a>
+        <nav class="p-nav" aria-label="Main">
+          <ul role="list">
+            {
+              nav.slice(1).map((item) => (
+                <li>
+                  <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <div class="p-header__actions">
+          <a class="pill" href={mailto(`${productName} enquiry`)}>Talk to us</a>
+          <a class="pill pill--dark" href={requestAccess(productName)}>Request access</a>
+          <button
+            class="menu-button"
+            type="button"
+            data-menu-button
+            aria-expanded="false"
+            aria-controls="product-menu"
+            aria-label="Open menu"
+          >
+            <Icon name="menu" class="menu-button__open" />
+            <Icon name="close" class="menu-button__close" />
+          </button>
+        </div>
+      </div>
+      <div class="p-menu" id="product-menu" data-menu-panel>
+        <nav aria-label="Main">
+          <ul role="list">
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+            <li>
+              <a href={requestAccess(productName)}>Request access</a>
+            </li>
+            <li>
+              <a href={mailto(`${productName} enquiry`)}>Talk to us</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </div>
+</BaseLayout>

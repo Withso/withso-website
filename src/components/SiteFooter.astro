@@ -1,0 +1,78 @@
+---
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import SocialLinks from './SocialLinks.astro';
+import { links, mailto, site } from '../data/site';
+
+const columns = [
+  {
+    heading: 'Products',
+    items: [
+      { label: 'Mapsmith', href: '/mapsmith' },
+      { label: 'JurisField', href: '/jurisfield' },
+    ],
+  },
+  {
+    heading: 'Initiatives',
+    items: [
+      { label: 'NammaTN', href: links.nammatn, external: true },
+      { label: 'Zeros', href: links.zeros, external: true },
+    ],
+  },
+  {
+    heading: 'Company',
+    items: [
+      { label: 'About', href: '/about' },
+      { label: 'Contact', href: mailto() },
+      { label: 'llms.txt', href: '/llms.txt' },
+    ],
+  },
+  {
+    heading: 'Legal',
+    items: [
+      { label: 'Privacy policy', href: '/privacy' },
+      { label: 'Terms & conditions', href: '/terms' },
+    ],
+  },
+];
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <a href="/" aria-label="Withso home"><Logo /></a>
+        <p class="site-footer__tagline">
+          Technology solutions and geospatial products, built in Chennai for teams that work with places.
+        </p>
+        <SocialLinks />
+      </div>
+      <nav class="site-footer__cols" aria-label="Footer">
+        {
+          columns.map((column) => (
+            <div>
+              <p class="site-footer__heading">{column.heading}</p>
+              <ul role="list">
+                {column.items.map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      {...('external' in item && item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      {item.label}
+                      {'external' in item && item.external && <Icon name="arrow-external" />}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+    <div class="site-footer__base">
+      <p>© 2026 {site.company}. All rights reserved.</p>
+      <p>CIN {site.cin} · {site.location}</p>
+    </div>
+  </div>
+</footer>
