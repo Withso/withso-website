@@ -1,55 +1,67 @@
-# withso.com
+# Withso company website
 
-Marketing site for withso. Built with **Next.js 16 (App Router) + TypeScript + Tailwind CSS v4**.
+The Withso company website introduces Mapsmith and JurisField as the core GIS products, NammaTN as a social impact initiative, and Zeros as an AI orchestrator platform.
 
-## Routes
+## Pages
 
-| Path | Page |
-| --- | --- |
-| `/` | Home (hero + ecosystem) |
-| `/legal/privacy-policy` | Privacy Policy |
-| `/legal/terms` | Terms of Service |
+- `/` — company homepage
+- `/mapsmith` — geospatial platform
+- `/jurisfield` — field operations
+- `/about` — company information
+- `/privacy` — privacy policy
+- `/terms` — terms and conditions
+- Legacy policy routes and a custom 404 page
 
-## Run
+## Requirements
 
-```bash
-bun run dev      # http://localhost:3000
-bun run build    # production build
+Python 3.10 or later and Node.js. The website has no external package dependencies, database, API keys or runtime secrets.
+
+## Build and validate
+
+From the repository root:
+
+```sh
+bash scripts/build.sh
 ```
 
-## Where things live
+The build generates HTML, validates routes, assets, metadata and accessible tab relationships, checks JavaScript syntax, and copies the finished website to `out/` for deployment. The same command is available through the package script:
 
-| What | File |
-| --- | --- |
-| **Home copy + footer (mock data)** | [`lib/site-data.ts`](lib/site-data.ts) |
-| **Legal copy + company info** | [`lib/legal-content.ts`](lib/legal-content.ts) |
-| Brand tokens (colors, fonts, motion) | [`app/globals.css`](app/globals.css) |
-| Root layout (header + footer wrap all pages) | [`app/layout.tsx`](app/layout.tsx) |
-| Home composition | [`app/page.tsx`](app/page.tsx) |
-| Top navigation | [`components/site-header.tsx`](components/site-header.tsx) |
-| Minimal footer | [`components/site-footer.tsx`](components/site-footer.tsx) |
-| Hero headline | [`components/hero.tsx`](components/hero.tsx) |
-| "Three groups" org diagram | [`components/ecosystem.tsx`](components/ecosystem.tsx) |
-| Legal page renderer | [`components/legal-page.tsx`](components/legal-page.tsx) |
-| Logo (withso wordmark) | [`components/logo.tsx`](components/logo.tsx) |
-| Product / social icons / arrows | [`components/icons.tsx`](components/icons.tsx) |
-| Status badges (Live/Preview) | [`components/status-badge.tsx`](components/status-badge.tsx) |
-| Item rows + buttons | [`components/item-row.tsx`](components/item-row.tsx), [`components/button.tsx`](components/button.tsx) |
+```sh
+npm run build
+```
 
-> Content is intentionally separated into data files so copy can be iterated
-> without touching components. Company specifics for the legal pages (entity,
-> email, address, jurisdiction, effective date) live in one `legalMeta` block.
+## Preview
 
-## Brand
+```sh
+python3 -m http.server 8000 --directory dist --bind 0.0.0.0
+```
 
-- Background `#f7f6f2` (withso cream) · Ink `#221e1c` (withso wordmark) · Muted `#6f6a64`
-- Red `#ed1c24` retained as the "Live" badge accent
-- Type: **Hanken Grotesk** (geometric grotesque, heavy display weights)
+Open `http://localhost:8000`. Clean page paths such as `/mapsmith` resolve to their directory index.
 
-## Note on legal pages
+## Editing
 
-The Privacy Policy and Terms are an original, professionally-structured
-**starting template** — not copied from any source and **not legal advice**.
-Review with counsel and fill the `[Add your registered business address]`
-placeholder (and confirm the legal entity name) in `lib/legal-content.ts`
-before publishing.
+- Page copy, shared header/footer and product illustrations: `scripts/generate_site.py`
+- Styles and responsive layouts: `dist/assets/site.css`
+- Navigation, reveal effects and use-case tabs: `dist/assets/site.js`
+- Product brand marks: `dist/assets/mapsmith.svg` and `dist/assets/jurisfield.svg`
+- Route and accessibility checks: `scripts/validate_site.py`
+
+Generated HTML in `dist/` is checked in so the website can be served without a build step. Regenerate it after changing the generator. CSS, JavaScript and product assets are authored directly and preserved during generation.
+
+Illustrative workspaces and sample charts are demonstration content, not live product sessions or measured usage statistics.
+
+## Deployment
+
+Configure a static web host with:
+
+- Build command: `npm run build` or `bash scripts/build.sh`
+- Output directory: `out`
+- Domain: `withso.com`
+
+The package build script also works with `bun run build`. The generated pages use `https://withso.com` for canonical URLs, social metadata, robots and the sitemap. Domain and DNS settings are managed separately from this repository.
+
+Serve directory index files for the page routes and `404.html` for missing pages. The entire website runs as static HTML, CSS, JavaScript and SVG assets.
+
+## Copyright
+
+© 2026 Withso Technologies (OPC) Private Limited. All rights reserved. No open-source licence is granted by this repository. Third-party names and marks belong to their respective owners.
