@@ -1,0 +1,44 @@
+# Withso
+
+> Withso Technologies (OPC) Private Limited is a technology company in Chennai, India. It builds geospatial software products, Mapsmith (web GIS) and JurisField (field operations), and designs and builds custom GIS applications for organisations. It also runs two independent initiatives: Zeros, an open-source app for developer productivity, and NammaTN, a social impact platform for civic issues in Tamil Nadu.
+
+Withso builds products and custom software for organisations whose work depends on location: where things are, which area a task belongs to, and what changed on the ground. Mapsmith is where spatial data is brought in, mapped, analysed and published. JurisField turns that geography into offline-ready field assignments and returns every record with its location and evidence.
+
+Company facts:
+
+- Legal name: Withso Technologies (OPC) Private Limited
+- Corporate identity number (CIN): U74103TN2025OPC177570
+- Incorporated in India in 2025
+- Registered office: 766, Tower 1, Shakti Towers, Ground Floor, Anna Salai, Chennai, India – 600002
+- Contact: contact@withso.com
+- Website: https://withso.com
+
+## Products
+
+- [Mapsmith](https://withso.com/mapsmith): A geographic workspace in the browser. Import GeoJSON, CSV with coordinate columns, zipped Shapefiles and GeoPackages as layers; style maps; run buffer, clip, intersect, dissolve, spatial join and summarize-within analysis, with every result saved as a new layer; build dashboards; and keep work private, share it with an organisation or teams, or publish it publicly, where anyone can open it without an account. The API serves GeoJSON queries, vector tiles and map styles behind scoped API keys, with a TypeScript SDK and a command-line tool. Mapsmith is self-hosted, backed by PostGIS, runs with Docker and is built with Angular, Go and MapLibre. Accounts are created by an administrator; to request access, email contact@withso.com.
+- [JurisField](https://withso.com/jurisfield): A field operations platform for place-based work, in three parts that share the same people, permissions, layers, forms and record history. JurisField View gives each person the layers, attributes and jurisdictions they may see, online or offline. JurisField Collect downloads each assignment as an offline pack and captures point, line and polygon geometry, answers, photos and signatures, with drafts saved on the device and safe retries that do not create duplicate records. JurisField Operations publishes layers and forms, dispatches individual, team and area assignments, and is where records are returned, corrected, approved or rejected, with exports, webhooks and audit history. Collection works in native iOS and Android apps and a browser collector.
+- JurisField plans: JurisField runs as a managed cloud service. Every cloud plan starts with a 30-day trial. Solo is for independent field professionals. Team adds shared dispatch, review, roles and integrations, and includes 10 users. Enterprise Cloud adds SSO, custom capacity and retention, data-residency planning, implementation support and a service-level agreement. To request access, email contact@withso.com.
+
+## GIS development
+
+- [Custom GIS development](https://withso.com/#gis-development): Withso designs and builds GIS applications around an organisation's own data, users and infrastructure: the data model and PostGIS services underneath, the web maps and APIs on top, and the field apps that keep records flowing back. The delivery workflow runs through overlapping phases: Discover (users, decisions and source data), Model (spatial schema, PostGIS and data quality), Build (web maps, APIs and field apps), Deploy (on the client's infrastructure or in the cloud) and Support (updates, monitoring and handover).
+- [How Withso approaches GIS development](https://withso.com/about#how-we-work): Four principles: start with the decision a map should support; get the spatial data model right in PostGIS, with validation and a record of where each feature came from; build on open standards such as GeoJSON, vector tiles, PostGIS and MapLibre so data stays portable; and deploy where the work happens, self-hosted or in the cloud, with documentation, monitoring and support after handover.
+- Technology used: PostGIS for spatial databases, MapLibre for web mapping, Go for services and APIs, Angular and TypeScript for web applications, iOS and Android for field apps, and Keycloak and Docker for identity and delivery.
+
+## Initiatives
+
+- [Zeros](https://github.com/Withso/zeros): Withso's developer productivity initiative. An open-source (MIT licence), local-first macOS app for running coding agents against real repositories. Each workspace is an isolated Git worktree with its own conversation, terminal, preview and review surface, so several agents can work in parallel without interfering. Project site: https://zeros.build/
+- [NammaTN](https://nammatn.in/): Withso's social impact initiative. An independent civic platform for Tamil Nadu where citizens report local issues in Tamil or English, neighbours verify them, and community-confirmed fixes are tracked in the open. NammaTN is not a government grievance portal.
+
+## Company
+
+- [About Withso](https://withso.com/about): Company background, what Withso builds, how it approaches GIS development, and verified company information.
+- [Email](mailto:contact@withso.com): Product enquiries, GIS projects and partnerships.
+- [LinkedIn](https://www.linkedin.com/company/withso)
+- [X](https://x.com/withsoAI)
+- [GitHub](https://github.com/Withso)
+
+## Optional
+
+- [Privacy policy](https://withso.com/privacy): How this website handles technical information, email correspondence and privacy requests.
+- [Terms & conditions](https://withso.com/terms): Terms for using this website and its content.

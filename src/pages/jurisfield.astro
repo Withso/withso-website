@@ -1,0 +1,391 @@
+---
+import ProductLayout from '../layouts/ProductLayout.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/product/Faq.astro';
+import FeatureIcon, { type FeatureIconName } from '../components/product/FeatureIcon.astro';
+import Marquee from '../components/product/Marquee.astro';
+import JurisFieldFlow from '../components/islands/JurisFieldFlow';
+import { mailto, requestAccess } from '../data/site';
+
+const modules: { icon: FeatureIconName; kicker: string; title: string; text: string; points: string[] }[] = [
+  {
+    icon: 'view',
+    kicker: 'JurisField View',
+    title: 'Know what is here, and who is responsible',
+    text: 'Give each person the map layers, attributes and jurisdictions they are allowed to see, online or offline.',
+    points: ['Identify, search and saved map views', 'Jurisdiction-aware location lookup', 'Controlled image and PDF outputs'],
+  },
+  {
+    icon: 'collect',
+    kicker: 'JurisField Collect',
+    title: 'Capture the whole record, beyond coverage',
+    text: 'Guide people through forms, point, line and polygon geometry, photos and signatures, while every draft saves on the device.',
+    points: ['Assignment-sized offline packs', 'Answer and location checks in the field', 'Safe retry with no duplicate submissions'],
+  },
+  {
+    icon: 'operations',
+    kicker: 'JurisField Operations',
+    title: 'Run the programme from one place',
+    text: 'Publish layers and forms, dispatch recurring work, review records and deliver approved results.',
+    points: ['Individual, team and area assignments', 'Return, correct, approve or reject', 'Exports, webhooks and audit history'],
+  },
+];
+
+const loop = [
+  { title: 'Set up', text: 'Publish forms, layers, permissions and location rules.' },
+  { title: 'Assign', text: 'Choose people, teams, tasks and work areas.' },
+  { title: 'Take offline', text: 'Download the exact map and work pack needed.' },
+  { title: 'Capture', text: 'Record answers, geometry and evidence with local checks.' },
+  { title: 'Sync', text: 'Send queued work safely when connectivity returns.' },
+  { title: 'Review', text: 'Validate, return, correct and approve with history intact.' },
+  { title: 'Deliver', text: 'Use maps and tables, export data or notify other systems.' },
+];
+
+const field = [
+  {
+    big: 'Prepare',
+    title: 'Carry the assignment',
+    text: 'Download the exact tasks, forms, layers and policies the work needs before leaving coverage.',
+    tag: 'Offline pack',
+  },
+  {
+    big: 'Collect',
+    title: 'Record with context',
+    text: 'Complete typed forms, geometry, signatures and photos, with policy checks running on the device.',
+    tag: 'Local checks',
+  },
+  {
+    big: 'Verify',
+    title: 'Keep location explainable',
+    text: 'Resolve the jurisdiction hierarchy and keep the dataset version, coordinates and query method with the record.',
+    tag: 'Location lineage',
+  },
+];
+
+const capabilities: { icon: FeatureIconName; title: string; text: string }[] = [
+  {
+    icon: 'form',
+    title: 'Forms that understand place',
+    text: 'Typed fields, conditions, calculations, repeats and spatial rules, with or without a target layer.',
+  },
+  {
+    icon: 'data',
+    title: 'Trusted map data',
+    text: 'Upload GeoJSON, Shapefile or GeoPackage data, review any issues and publish it when it is ready.',
+  },
+  {
+    icon: 'offline',
+    title: 'Reliable offline work',
+    text: 'Recover drafts, verify assignments and resend safely without creating duplicate records.',
+  },
+  {
+    icon: 'review',
+    title: 'Ready for review',
+    text: 'Keep a reliable change history, approve records and send trusted results to other systems.',
+  },
+];
+
+const work = [
+  { title: 'Inspections', text: 'Sites, structures and condition checks' },
+  { title: 'Surveys', text: 'Questions answered on location' },
+  { title: 'Asset checks', text: 'Confirm what is on the ground' },
+  { title: 'Environmental monitoring', text: 'Repeat observations over time' },
+  { title: 'Incident records', text: 'What happened, and where' },
+];
+
+const record = [
+  { title: 'Points', text: 'GPS location with accuracy' },
+  { title: 'Lines', text: 'Routes and linear assets' },
+  { title: 'Polygons', text: 'Areas and boundaries' },
+  { title: 'Photos', text: 'Evidence stored with the record' },
+  { title: 'Signatures', text: 'Sign-off in the field' },
+  { title: 'Typed answers', text: 'Text, choices and numbers' },
+  { title: 'Calculations', text: 'Values derived on the device' },
+  { title: 'Repeats', text: 'Several items in one record' },
+];
+
+const plans = [
+  {
+    name: 'JurisField Solo',
+    title: 'For one professional',
+    points: ['JurisField View', 'JurisField Collect', 'Personal operations workspace', 'Email support'],
+    cta: { label: 'Request Solo access', href: mailto('JurisField Solo access request') },
+  },
+  {
+    name: 'JurisField Team',
+    title: 'For a field team',
+    points: ['Everything in Solo', 'Team assignments and review', 'Roles, audit and integrations', 'Priority support'],
+    cta: { label: 'Request Team access', href: mailto('JurisField Team access request') },
+  },
+  {
+    name: 'Enterprise Cloud',
+    title: 'For scaled programmes',
+    points: ['Enterprise SSO and controls', 'Custom capacity and retention', 'Implementation support', 'Service-level agreement'],
+    cta: { label: 'Talk to us', href: mailto('JurisField Enterprise Cloud enquiry') },
+  },
+];
+
+const faq = [
+  {
+    q: 'What is JurisField?',
+    a: '<p>JurisField is a field operations platform for place-based work. It turns layers, forms and work areas into offline-ready assignments, and returns every record with its geometry, answers, photos, signatures and history, ready for review.</p>',
+  },
+  {
+    q: 'Does it work without a mobile connection?',
+    a: '<p>Yes. Each assignment downloads as an offline pack with the forms, map items and tasks it needs. Drafts save on the device, and queued work sends when connectivity returns. Retries are safe and do not create duplicate records.</p>',
+  },
+  {
+    q: 'Which devices can field teams use?',
+    a: '<p>Native iOS and Android apps, and a browser collector for work in a web browser.</p>',
+  },
+  {
+    q: 'What can a field record contain?',
+    a: '<p>Typed answers, point, line or polygon geometry, photos and signatures. Forms support conditions, calculations, repeats and spatial rules, with or without a target layer.</p>',
+  },
+  {
+    q: 'How does review work?',
+    a: '<p>Reviewers can return, correct, approve or reject records, and every change stays in the record’s history. Approved results appear in live maps and tables.</p>',
+  },
+  {
+    q: 'Can we use our existing GIS data?',
+    a: '<p>Yes. Upload GeoJSON, Shapefile or GeoPackage data, review any issues and publish layers when they are ready.</p>',
+  },
+  {
+    q: 'How do results reach other systems?',
+    a: '<p>Use maps and tables directly, export data, or notify other systems with webhooks. An audit history records what changed and when.</p>',
+  },
+  {
+    q: 'Where is JurisField hosted?',
+    a: '<p>JurisField runs as a managed cloud service. Solo and Team workspaces can start immediately. Enterprise Cloud adds SSO, custom capacity and retention, data-residency planning, implementation support and a service-level agreement.</p>',
+  },
+  {
+    q: 'How do we get started?',
+    a: `<p>Every cloud plan starts with a 30-day trial. <a href="${requestAccess('JurisField')}">Request access</a> by email to start a pilot, or <a href="${mailto('JurisField enquiry')}">talk to us</a> about a larger programme.</p>`,
+  },
+];
+---
+
+<ProductLayout
+  title="JurisField — Offline field data collection that returns as trusted GIS"
+  description="JurisField turns layers, forms and work areas into offline-ready assignments. Capture geometry, answers, photos and signatures, then review every record."
+  path="/jurisfield"
+  product="jurisfield"
+  productName="JurisField"
+  themeColor="#fafaf9"
+>
+  <section class="p-container p-hero" aria-labelledby="hero-title">
+    <div data-reveal>
+      <h1 class="p-hero__title" id="hero-title">
+        <img src="/assets/jurisfield.svg" alt="" width="64" height="64" />
+        JurisField
+      </h1>
+      <p class="p-hero__lede">
+        <strong>Every assignment returns as trusted GIS.</strong> Turn layers, forms and work areas into offline-ready
+        assignments, capture geometry, answers, photos and signatures in the field, and review every record with its context
+        intact.
+      </p>
+      <div class="p-hero__actions">
+        <a class="p-btn p-btn--primary" href={requestAccess('JurisField')}>Request access</a>
+        <a class="p-btn p-btn--secondary" href="#loop">See the field loop</a>
+      </div>
+    </div>
+    <a class="p-callout" href="#field" data-reveal style="--reveal-delay: 120ms">
+      <span>iOS · Android · Browser</span>
+      <span>Field work beyond coverage <Icon name="arrow-right" /></span>
+    </a>
+  </section>
+
+  <section class="p-container" aria-label="Interactive sample assignment">
+    <div class="p-stage" data-reveal>
+      <JurisFieldFlow client:visible />
+      <p class="p-stage__note">
+        Interactive sample · Fill in the record, save it offline, go online, then review it · Illustrative data, not real sites
+      </p>
+    </div>
+  </section>
+
+  <section class="p-container p-section" aria-labelledby="platform-title">
+    <div class="p-split" data-reveal>
+      <div>
+        <p class="p-eyebrow">Platform</p>
+        <h2 class="p-h2" id="platform-title">
+          One record, shared by the map, <span class="soft">the field app and the review desk.</span>
+        </h2>
+      </div>
+      <div class="p-split__aside">
+        <p class="p-text">
+          View, Collect and Operations share the same people, permissions, layers, forms and record history. Start with one
+          capability and expand without rebuilding the operation.
+        </p>
+        <div class="p-links">
+          <a href="#plans">Compare plans <Icon name="arrow-right" /></a>
+        </div>
+      </div>
+    </div>
+    <ul class="p-cards" role="list">
+      {
+        modules.map((item, i) => (
+          <li class="p-card" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+            <FeatureIcon name={item.icon} />
+            <span class="p-card__kicker">{item.kicker}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            <ul role="list">
+              {item.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="p-container p-section" id="loop" aria-labelledby="loop-title">
+    <div class="p-split" data-reveal>
+      <div>
+        <p class="p-eyebrow">The field loop</p>
+        <h2 class="p-h2" id="loop-title">From source data <span class="soft">to approved results.</span></h2>
+      </div>
+      <div class="p-split__aside">
+        <p class="p-text">
+          The assignment that leaves the office carries the same context that returns with the record, through every handoff
+          from setup to delivery.
+        </p>
+      </div>
+    </div>
+    <ol class="p-steps p-steps--loop" role="list" style="--steps: 7" data-reveal>
+      {
+        loop.map((step, i) => (
+          <li class="p-step" style={`--i:${i}`}>
+            <span class="p-step__n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="p-container p-section" id="field" aria-labelledby="field-title">
+    <div class="p-split" data-reveal>
+      <div>
+        <p class="p-eyebrow">Field app</p>
+        <h2 class="p-h2" id="field-title">Field work that continues <span class="soft">beyond coverage.</span></h2>
+      </div>
+      <div class="p-split__aside">
+        <p class="p-text">
+          Native iOS and Android apps, and a browser collector. Each assignment includes the forms, map items and tasks it
+          needs. Work saves automatically and sends when connectivity returns.
+        </p>
+      </div>
+    </div>
+    <ul class="p-uses" role="list">
+      {
+        field.map((item, i) => (
+          <li class="p-use" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+            <span class="p-use__big">
+              <span class="p-use__n">{String(i + 1).padStart(2, '0')}</span>
+              {item.big}
+            </span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            <small>{item.tag}</small>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="p-container p-section" aria-labelledby="capabilities-title">
+    <div class="p-split" data-reveal>
+      <div>
+        <p class="p-eyebrow">Capabilities</p>
+        <h2 class="p-h2" id="capabilities-title">More than forms <span class="soft">on a map.</span></h2>
+      </div>
+      <div class="p-split__aside">
+        <p class="p-text">
+          JurisField keeps the lineage of field data, from the published source through offline work to the reviewed output.
+        </p>
+      </div>
+    </div>
+    <ul class="p-cards p-cards--4" role="list">
+      {
+        capabilities.map((item, i) => (
+          <li class="p-card" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+            <FeatureIcon name={item.icon} />
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="p-marquees" data-reveal>
+      <Marquee label="Built for place-based work" items={work} duration={44} />
+      <Marquee label="In every record" items={record} reverse duration={52} />
+    </div>
+  </section>
+
+  <section class="p-container p-section" id="plans" aria-labelledby="plans-title">
+    <div class="p-split" data-reveal>
+      <div>
+        <p class="p-eyebrow">Plans</p>
+        <h2 class="p-h2" id="plans-title">Managed cloud, <span class="soft">from one professional to a programme.</span></h2>
+      </div>
+      <div class="p-split__aside">
+        <p class="p-text">
+          Every cloud plan starts with a 30-day trial. Solo is for independent field professionals. Team adds shared
+          dispatch, review, roles and integrations, and includes 10 users.
+        </p>
+      </div>
+    </div>
+    <ul class="p-cards p-plans" role="list">
+      {
+        plans.map((plan, i) => (
+          <li class="p-card" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+            <span class="p-card__kicker">{plan.name}</span>
+            <h3>{plan.title}</h3>
+            <ul role="list">
+              {plan.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+            <a class="p-plan__cta" href={plan.cta.href}>
+              {plan.cta.label}
+              <Icon name="arrow-right" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <Faq items={faq} subject="JurisField question" />
+
+  <section class="p-container p-section" aria-label="Related product">
+    <a class="p-cross" href="/mapsmith" data-reveal>
+      <div>
+        <span class="p-cross__brand">
+          <img src="/assets/mapsmith.svg" alt="" width="24" height="24" />
+          Mapsmith
+        </span>
+        <h2>Need to analyse and publish spatial data?</h2>
+        <p>
+          Mapsmith is a geographic workspace in the browser for importing data, making maps, running analysis and publishing
+          dashboards.
+        </p>
+      </div>
+      <span class="p-cross__go" aria-hidden="true"><Icon name="arrow-right" /></span>
+    </a>
+  </section>
+
+  <section class="p-container p-cta" aria-labelledby="cta-title" data-reveal>
+    <p class="p-eyebrow">Get started</p>
+    <h2 id="cta-title">Publish the work. Equip the field. Review with context.</h2>
+    <p>Start with the capabilities you need, then grow across View, Collect and Operations on the same managed platform.</p>
+    <div class="p-hero__actions">
+      <a class="p-btn p-btn--primary" href={requestAccess('JurisField')}>Request access</a>
+      <a class="p-btn p-btn--secondary" href={mailto('JurisField enquiry')}>Talk to us</a>
+    </div>
+  </section>
+</ProductLayout>

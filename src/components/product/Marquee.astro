@@ -1,0 +1,37 @@
+---
+interface Props {
+  label: string;
+  items: { title: string; text: string }[];
+  reverse?: boolean;
+  duration?: number;
+}
+
+const { label, items, reverse = false, duration = 46 } = Astro.props;
+
+// Each half of the loop must be wider than the widest container, so short lists repeat.
+const half = Array.from({ length: Math.max(1, Math.ceil(10 / items.length)) }, () => items).flat();
+---
+
+<div>
+  <p class="p-marquee__label">{label}</p>
+  <div class="p-marquee" data-reverse={reverse ? '' : undefined} style={`--duration:${duration}s`}>
+    <ul class="p-marquee__track" role="list">
+      {
+        half.map((item, i) => (
+          <li class="p-marquee__item" aria-hidden={i >= items.length ? 'true' : undefined}>
+            <b>{item.title}</b>
+            <span>{item.text}</span>
+          </li>
+        ))
+      }
+      {
+        half.map((item) => (
+          <li class="p-marquee__item" aria-hidden="true">
+            <b>{item.title}</b>
+            <span>{item.text}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>

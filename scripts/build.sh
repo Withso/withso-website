@@ -4,18 +4,9 @@ set -euo pipefail
 WITHSO_PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$WITHSO_PROJECT_ROOT"
 
-python3 scripts/generate_site.py
-python3 scripts/validate_site.py
-node --check dist/assets/site.js
+if [ ! -d node_modules ]; then
+  npm ci --no-audit --no-fund
+fi
 
-python3 - <<'PY'
-from pathlib import Path
-from shutil import copytree, rmtree
-
-root = Path.cwd()
-output = root / 'out'
-if output.exists():
-    rmtree(output)
-copytree(root / 'dist', output)
-print('Static deployment output ready in out/.')
-PY
+# Type check, build the static site into out/, then validate the output.
+npm run build

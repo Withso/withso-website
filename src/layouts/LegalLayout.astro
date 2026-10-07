@@ -1,0 +1,56 @@
+---
+import CompanyLayout from './CompanyLayout.astro';
+import type { LegalDocument } from '../data/legal';
+import { mailto, site } from '../data/site';
+
+interface Props {
+  doc: LegalDocument;
+  /** The route being rendered. Legacy routes reuse the document and point search engines at its canonical path. */
+  path: string;
+}
+
+const { doc, path } = Astro.props;
+---
+
+<CompanyLayout title={doc.title} description={doc.description} {path} canonicalPath={doc.path}>
+  <article class="c-section c-hero c-legal" aria-labelledby="legal-title">
+    <span class="c-num" aria-hidden="true">01</span>
+    <div class="c-body">
+      <span class="c-kicker">{doc.kicker}</span>
+      <h1 class="c-title" id="legal-title">{doc.heading}</h1>
+      <p class="c-legal__meta">Last updated · <time datetime={site.policyDateIso}>{site.policyDate}</time></p>
+      <p class="c-legal__lead" set:html={doc.lead} />
+      <div class="c-legal__body">
+        {
+          doc.sections.map((section) => (
+            <section>
+              <h2 id={section.id}>{section.title}</h2>
+              {section.body.map((paragraph) => (
+                <p set:html={paragraph} />
+              ))}
+            </section>
+          ))
+        }
+      </div>
+      <address class="c-legal__address">
+        {site.company}<br />
+        CIN: {site.cin}<br />
+        {site.address[0]}<br />
+        {site.address[1]}<br />
+        <a href={mailto()}>{site.email}</a>
+      </address>
+    </div>
+    <nav class="c-legal__toc" aria-label="On this page" data-toc>
+      <p class="mono-label">On this page</p>
+      <ol role="list">
+        {
+          doc.sections.map((section) => (
+            <li>
+              <a href={`#${section.id}`}>{section.title}</a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+  </article>
+</CompanyLayout>

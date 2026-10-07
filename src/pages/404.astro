@@ -1,0 +1,46 @@
+---
+import CompanyLayout from '../layouts/CompanyLayout.astro';
+---
+
+<CompanyLayout
+  title="Page not found | Withso"
+  description="This page could not be found. Explore Withso, Mapsmith and JurisField."
+  path="/404"
+  noindex
+>
+  <section class="c-section c-hero" aria-labelledby="nf-title">
+    <span class="c-num" aria-hidden="true">404</span>
+    <div class="c-body">
+      <span class="c-kicker">Error 404</span>
+      <h1 class="c-title" id="nf-title">This page could not be found.</h1>
+      <div class="c-prose">
+        <p>The page may have moved, or the address may be mistyped. Explore our products or return to the homepage.</p>
+      </div>
+      <div class="c-actions">
+        <a class="btn btn--solid" href="/">Back to Withso</a>
+        <a class="btn btn--outline" href="/mapsmith">Mapsmith</a>
+        <a class="btn btn--outline" href="/jurisfield">JurisField</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="c-section c-nf" aria-hidden="true">
+    <div class="c-wide c-panel c-nf__panel" data-crosshair data-lat="13.16,13.00" data-lon="80.16,80.36">
+      <img class="c-terrain" src="/assets/terrain-panel.svg" alt="" width="1200" height="680" decoding="async" />
+      <div class="c-crosshair"></div>
+      <div class="c-nf__pin">
+        <span class="c-nf__ring"></span>
+        <span class="c-nf__dot"></span>
+        <div class="c-nf__result">
+          <span class="mono-label">Identify</span>
+          <strong>No feature at this location</strong>
+          <span>0 results</span>
+        </div>
+      </div>
+      <div class="c-panel__foot">
+        <span data-crosshair-readout>13.0827° N  80.2707° E</span>
+        <span>Illustrative terrain · generated contours</span>
+      </div>
+    </div>
+  </section>
+</CompanyLayout>

@@ -1,0 +1,85 @@
+---
+import '@fontsource-variable/source-serif-4/wght.css';
+import '../styles/company.css';
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import Logo from '../components/Logo.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { companyNav, mailto } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  canonicalPath?: string;
+  current?: string;
+  noindex?: boolean;
+}
+
+const { title, description, path, canonicalPath, current = path, noindex } = Astro.props;
+---
+
+<BaseLayout {title} {description} {path} {canonicalPath} {noindex} bodyClass="theme-company" themeColor="#f6f5f2">
+  <div class="c-page">
+    <header class="c-bar" data-menu data-header>
+      <div class="c-bar__inner">
+        <a class="c-bar__brand" href="/" aria-label="Withso home"><Logo /></a>
+        <button
+          class="menu-button"
+          type="button"
+          data-menu-button
+          aria-expanded="false"
+          aria-controls="company-menu"
+          aria-label="Open menu"
+        >
+          <Icon name="menu" class="menu-button__open" />
+          <Icon name="close" class="menu-button__close" />
+        </button>
+      </div>
+      <div class="c-bar__panel" id="company-menu" data-menu-panel>
+        <nav class="c-nav" aria-label="Main">
+          <ul role="list">
+            {
+              companyNav.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={current === item.href ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <a class="btn btn--solid" href={mailto()}>Get in touch</a>
+      </div>
+    </header>
+
+    <div class="c-shell">
+      <div class="c-lines" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <aside class="c-rail">
+        <div class="c-rail__inner">
+          <a class="c-rail__brand" href="/" aria-label="Withso home"><Logo /></a>
+          <nav class="c-nav" aria-label="Main">
+            <ul role="list">
+              {
+                companyNav.map((item) => (
+                  <li>
+                    <a href={item.href} aria-current={current === item.href ? 'page' : undefined}>
+                      {item.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+          <a class="btn btn--outline btn--sm" href={mailto()}>Get in touch</a>
+          <p class="c-rail__meta">Chennai, India<br />13.0827° N 80.2707° E</p>
+        </div>
+      </aside>
+      <main id="main" class="c-main">
+        <slot />
+      </main>
+    </div>
+    <SiteFooter />
+  </div>
+</BaseLayout>

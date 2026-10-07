@@ -1,0 +1,231 @@
+---
+import CompanyLayout from '../layouts/CompanyLayout.astro';
+import Icon from '../components/Icon.astro';
+import { links, mailto, site, social } from '../data/site';
+
+const facts = [
+  ['Based in', site.location],
+  ['Incorporated', 'India · 2025'],
+  ['Products', 'Mapsmith · JurisField'],
+  ['Initiatives', 'NammaTN · Zeros'],
+];
+
+type Row = { name: string; href: string; text: string; go: string; mark?: string; external?: boolean };
+
+const products: Row[] = [
+  {
+    name: 'Mapsmith',
+    href: '/mapsmith',
+    mark: '/assets/mapsmith.svg',
+    text: 'A web GIS for bringing in spatial data, making maps, running analysis and publishing dashboards, with an API, SDK and CLI for programmable workflows.',
+    go: 'Explore',
+  },
+  {
+    name: 'JurisField',
+    href: '/jurisfield',
+    mark: '/assets/jurisfield.svg',
+    text: 'A field operations platform that turns layers, forms and work areas into offline-ready assignments, and returns each record with its location and evidence.',
+    go: 'Explore',
+  },
+];
+
+const beyond: Row[] = [
+  {
+    name: 'Custom GIS development',
+    href: '/#gis-development',
+    text: 'Data models, PostGIS services, web maps, APIs and field apps, designed around an organisation’s own data, users and infrastructure.',
+    go: 'Workflow',
+  },
+  {
+    name: 'NammaTN',
+    href: links.nammatn,
+    external: true,
+    text: 'An independent civic platform for Tamil Nadu. Citizens report local issues and track community-confirmed fixes in the open. It is not a government portal.',
+    go: 'nammatn.in',
+  },
+  {
+    name: 'Zeros',
+    href: links.zeros,
+    external: true,
+    text: 'An open-source, local-first macOS app for running coding agents in parallel, each in its own isolated Git worktree.',
+    go: 'GitHub',
+  },
+];
+
+const principles = [
+  {
+    title: 'Start with the decision',
+    text: 'We begin with the people who will use the map and the decisions it should support, then work back to the data, the schema and the screens.',
+  },
+  {
+    title: 'Get the data model right',
+    text: 'A clear spatial model in PostGIS, with validation rules and a record of where each feature came from, keeps later maps, APIs and reports simple.',
+  },
+  {
+    title: 'Build on open standards',
+    text: 'GeoJSON, vector tiles, PostGIS and MapLibre keep data portable between tools and teams, during the project and after it ends.',
+  },
+  {
+    title: 'Deploy where the work happens',
+    text: 'Self-hosted on an organisation’s own infrastructure or run in the cloud, with documentation, monitoring and support after handover.',
+  },
+];
+
+const profiles = social.filter((item) => item.id !== 'email');
+---
+
+<CompanyLayout
+  title="About Withso — Company & products"
+  description="Withso Technologies (OPC) Private Limited is a Chennai-based software company focused on Mapsmith, JurisField, geospatial development and civic technology."
+  path="/about"
+>
+  <section class="c-section c-hero" aria-labelledby="about-title">
+    <span class="c-num" aria-hidden="true">01</span>
+    <div class="c-body" data-reveal>
+      <span class="c-kicker">About Withso</span>
+      <h1 class="c-title" id="about-title">A product company with a geospatial core, based in Chennai.</h1>
+      <div class="c-prose">
+        <p>
+          Withso develops its own software, with Mapsmith and JurisField at the centre of our work. Our focus is simple:
+          make spatial data easier to publish, understand and use in the real world.
+        </p>
+        <p>
+          We also build custom GIS applications for organisations, connecting product engineering with the practical needs
+          of public systems and field teams.
+        </p>
+        <p>
+          Product engineering is led by Santhosh Balaji S, whose experience spans software products and public-sector GIS
+          systems.
+        </p>
+      </div>
+      <ul class="c-specs" role="list" aria-label="Withso at a glance">
+        {
+          facts.map(([label, value]) => (
+            <li>
+              {label}
+              <span>{value}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="c-section" aria-labelledby="build-title">
+    <span class="c-num" aria-hidden="true">02</span>
+    <div class="c-body" data-reveal>
+      <h2 class="c-h2" id="build-title">What we build</h2>
+      <div class="c-prose">
+        <p>
+          Two geospatial products at the centre, custom GIS work around them, and two independent initiatives that use the
+          same engineering.
+        </p>
+      </div>
+    </div>
+    <div class="c-wide" data-reveal>
+      {
+        [
+          { label: 'Products', rows: products },
+          { label: 'Services and initiatives', rows: beyond },
+        ].map((group) => (
+          <div class="c-group">
+            <h3 class="c-kicker c-group__label">{group.label}</h3>
+            <ul class="c-rows" role="list">
+              {group.rows.map((row) => (
+                <li class="c-row">
+                  <h4 class="c-row__title">
+                    {row.mark && <img src={row.mark} alt="" width="22" height="22" />}
+                    <a href={row.href} {...(row.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                      {row.name}
+                      {row.external && <span class="visually-hidden"> (opens in a new tab)</span>}
+                    </a>
+                  </h4>
+                  <p>{row.text}</p>
+                  <span class="c-row__go" aria-hidden="true">
+                    {row.go} <Icon name={row.external ? 'arrow-external' : 'arrow-right'} />
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="c-section" id="how-we-work" aria-labelledby="work-title">
+    <span class="c-num" aria-hidden="true">03</span>
+    <div class="c-body" data-reveal>
+      <h2 class="c-h2" id="work-title">How we approach custom GIS development</h2>
+      <div class="c-prose">
+        <p>
+          Custom projects use the same stack and habits as our own products: PostGIS underneath, open formats in between,
+          and web and field apps on top. Four principles shape each engagement.
+        </p>
+      </div>
+    </div>
+    <ol class="c-wide c-principles" role="list" data-reveal>
+      {
+        principles.map((principle, i) => (
+          <li class="c-principle">
+            <h3>
+              <span aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              {principle.title}
+            </h3>
+            <p>{principle.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="c-body c-actions" data-reveal>
+      <a class="btn btn--solid" href={mailto('GIS development enquiry')}>Discuss a project</a>
+      <a class="btn btn--outline" href="/#gis-development">See the delivery workflow <Icon name="arrow-right" /></a>
+    </div>
+  </section>
+
+  <section class="c-section" aria-labelledby="company-title">
+    <span class="c-num" aria-hidden="true">04</span>
+    <div class="c-body" data-reveal>
+      <h2 class="c-h2" id="company-title">Company information</h2>
+      <dl class="c-details">
+        <div>
+          <dt>Legal name</dt>
+          <dd>{site.company}</dd>
+        </div>
+        <div>
+          <dt>Corporate identity number</dt>
+          <dd>{site.cin}</dd>
+        </div>
+        <div>
+          <dt>Registered office</dt>
+          <dd>{site.address[0]}<br />{site.address[1]}</dd>
+        </div>
+        <div>
+          <dt>Company</dt>
+          <dd>{site.incorporated}</dd>
+        </div>
+        <div>
+          <dt>Contact</dt>
+          <dd><a href={mailto()}>{site.email}</a></dd>
+        </div>
+        <div>
+          <dt>Elsewhere</dt>
+          <dd class="c-details__links">
+            {
+              profiles.map((item) => (
+                <a href={item.href} target="_blank" rel="noopener noreferrer">
+                  {item.label}
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                </a>
+              ))
+            }
+          </dd>
+        </div>
+      </dl>
+      <p class="c-note">
+        Withso is an independently operated software company incorporated in India. NammaTN is an independent civic
+        initiative.
+      </p>
+    </div>
+  </section>
+</CompanyLayout>

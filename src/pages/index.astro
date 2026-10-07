@@ -1,0 +1,250 @@
+---
+import CompanyLayout from '../layouts/CompanyLayout.astro';
+import Icon from '../components/Icon.astro';
+import ProductArt from '../components/home/ProductArt.astro';
+import StoryArt, { type StoryKind } from '../components/home/StoryArt.astro';
+import { links, mailto } from '../data/site';
+
+const products = [
+  {
+    name: 'Mapsmith',
+    href: '/mapsmith',
+    mark: '/assets/mapsmith.svg',
+    kind: 'Web GIS',
+    art: 'mapsmith' as const,
+    description:
+      'Bring in spatial data, make maps, run spatial analysis and publish dashboards, all in one workspace in the browser.',
+    tags: 'Layers · Maps · Analysis · Dashboards · API',
+  },
+  {
+    name: 'JurisField',
+    href: '/jurisfield',
+    mark: '/assets/jurisfield.svg',
+    kind: 'Field operations',
+    art: 'jurisfield' as const,
+    description:
+      'Turn layers, forms and work areas into offline-ready assignments, then review every record with its location and evidence intact.',
+    tags: 'Assign · Capture offline · Sync · Review',
+  },
+];
+
+const flow = [
+  { name: 'Discover', note: 'Users, decisions and source data', color: '#e07a4f', s: 0, e: 0.2 },
+  { name: 'Model', note: 'Spatial schema, PostGIS and data quality', color: '#20A39A', s: 0.12, e: 0.4 },
+  { name: 'Build', note: 'Web maps, APIs and field apps', color: '#2d3cf0', s: 0.32, e: 0.8 },
+  { name: 'Deploy', note: 'On your infrastructure or in the cloud', color: '#4B5FD3', s: 0.72, e: 0.9 },
+  { name: 'Support', note: 'Updates, monitoring and handover', color: '#8f8a3a', s: 0.84, e: 1 },
+];
+
+const specs = [
+  ['Spatial databases', 'PostGIS'],
+  ['Web mapping', 'MapLibre'],
+  ['Services and APIs', 'Go'],
+  ['Web applications', 'Angular · TypeScript'],
+  ['Field apps', 'iOS · Android'],
+  ['Identity and delivery', 'Keycloak · Docker'],
+];
+
+const stories: { href: string; title: string; meta: string; art: StoryKind; external?: boolean; light?: boolean }[] = [
+  { href: '/mapsmith', title: 'Mapsmith: from location data to a clearer picture', meta: 'Product · Web GIS', art: 'mapsmith' },
+  { href: '/jurisfield', title: 'JurisField: every assignment returns as trusted GIS', meta: 'Product · Field operations', art: 'jurisfield' },
+  { href: '/about#how-we-work', title: 'How we approach custom GIS development', meta: 'Company · Services', art: 'development' },
+  { href: links.nammatn, title: 'NammaTN: report a civic issue and track it to a fix', meta: 'Initiative · Social impact', art: 'nammatn', external: true, light: true },
+  { href: links.zeros, title: 'Zeros: run coding agents in parallel, one worktree each', meta: 'Initiative · Open source', art: 'zeros', external: true },
+  { href: '/about', title: 'About Withso: a product company with a geospatial core', meta: 'Company · Chennai', art: 'about', light: true },
+];
+---
+
+<CompanyLayout
+  title="Withso — Geospatial software and technology solutions"
+  description="Withso builds Mapsmith and JurisField, geospatial software for spatial data, maps and fieldwork, and develops custom GIS applications. Based in Chennai, India."
+  path="/"
+>
+  <section class="c-section c-hero" aria-labelledby="hero-title">
+    <span class="c-num" aria-hidden="true">01</span>
+    <div class="c-body" data-reveal>
+      <h1 class="c-title" id="hero-title">
+        Withso builds <a href="/mapsmith">Mapsmith</a> and <a href="/jurisfield">JurisField</a>, geospatial software for teams
+        that work with places.
+      </h1>
+      <div class="c-prose">
+        <p>
+          We are a technology company in Chennai. We build products and custom software for organisations whose work
+          depends on location: where things are, which area a task belongs to, and what changed on the ground.
+        </p>
+        <p>
+          Mapsmith is a web GIS for bringing in spatial data, making maps, running analysis and publishing dashboards.
+          JurisField turns that geography into offline-ready field assignments and returns every record with its location
+          and evidence. Around both, we <a href="#gis-development">design and build GIS applications</a> from data model to
+          deployment.
+        </p>
+      </div>
+      <div class="c-actions">
+        <a class="btn btn--solid" href="/mapsmith">Explore Mapsmith</a>
+        <a class="btn btn--outline" href="/jurisfield">Explore JurisField</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="c-section" aria-labelledby="products-title">
+    <span class="c-num" aria-hidden="true">02</span>
+    <h2 class="visually-hidden" id="products-title">Products</h2>
+    <div class="c-wide c-panel" data-crosshair data-lat="13.16,13.00" data-lon="80.16,80.36" data-reveal>
+      <img class="c-terrain" src="/assets/terrain-panel.svg" alt="" width="1200" height="680" decoding="async" />
+      <div class="c-crosshair" aria-hidden="true"></div>
+      <div class="c-products">
+        {
+          products.map((product) => (
+            <article class="c-product">
+              <div class="c-product__head">
+                <img src={product.mark} alt="" width="26" height="26" />
+                <h3>
+                  <a href={product.href}>{product.name}</a>
+                </h3>
+                <span class="c-product__kind mono-label">{product.kind}</span>
+              </div>
+              <div class="c-product__art">
+                <ProductArt kind={product.art} />
+              </div>
+              <p class="c-product__desc">{product.description}</p>
+              <div class="c-product__foot">
+                <span class="c-product__tags">{product.tags}</span>
+                <span class="c-product__go" aria-hidden="true">
+                  Explore <Icon name="arrow-right" />
+                </span>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+      <div class="c-panel__foot" aria-hidden="true">
+        <span data-crosshair-readout>13.0827° N  80.2707° E</span>
+        <span>Illustrative terrain · generated contours</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="c-section" id="gis-development" aria-labelledby="dev-title">
+    <span class="c-num" aria-hidden="true">03</span>
+    <div class="c-body">
+      <div data-reveal>
+        <h2 class="c-h2" id="dev-title">Custom GIS development, from data to deployment</h2>
+        <div class="c-prose">
+          <p>
+            Not every spatial problem fits an off-the-shelf product. We design and build GIS applications around an
+            organisation’s own data, users and infrastructure: the data model and PostGIS services underneath, the web maps
+            and APIs on top, and the field apps that keep records flowing back.
+          </p>
+        </div>
+      </div>
+      <figure class="c-card" data-reveal>
+        <div class="c-card__head">
+          <span>GIS delivery workflow</span>
+          <a href={mailto('GIS development enquiry')}>Discuss a project <Icon name="arrow-right" /></a>
+        </div>
+        <ol class="c-flow" role="list">
+          {
+            flow.map((step, i) => (
+              <li style={`--c:${step.color};--s:${step.s};--e:${step.e};--i:${i}`}>
+                <span class="c-flow__n">{i + 1}</span>
+                <span class="c-flow__swatch" aria-hidden="true" />
+                <span class="c-flow__name">
+                  <strong>{step.name}</strong>
+                  <span>{step.note}</span>
+                </span>
+                <span class="c-flow__track" aria-hidden="true">
+                  <i />
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+        <figcaption class="c-card__foot">Illustrative sequence. Phases overlap and are scoped to each project.</figcaption>
+      </figure>
+      <ul class="c-specs" role="list" aria-label="Technology we work with" data-reveal>
+        {
+          specs.map(([label, value]) => (
+            <li>
+              {label}
+              <span>{value}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="c-section" aria-labelledby="initiatives-title">
+    <span class="c-num" aria-hidden="true">04</span>
+    <div class="c-body" data-reveal>
+      <h2 class="c-h2" id="initiatives-title">Initiatives beyond our products</h2>
+      <div class="c-prose">
+        <p>
+          The same engineering supports two independent efforts: one for citizens in Tamil Nadu, and one for the developers
+          who build software every day.
+        </p>
+      </div>
+    </div>
+    <div class="c-wide c-initiatives" data-reveal>
+      <article class="c-initiative">
+        <span class="c-kicker">Social impact</span>
+        <h3>NammaTN</h3>
+        <div class="c-prose">
+          <p>
+            An independent civic platform for Tamil Nadu. Citizens report local issues in Tamil or English, neighbours verify
+            them, and community-confirmed fixes are tracked in the open. NammaTN is not a government grievance portal.
+          </p>
+        </div>
+        <a class="btn btn--solid" href={links.nammatn} target="_blank" rel="noopener noreferrer">
+          Visit NammaTN <Icon name="arrow-external" />
+        </a>
+      </article>
+      <article class="c-initiative">
+        <span class="c-kicker">Developer productivity</span>
+        <h3>Zeros</h3>
+        <div class="c-prose">
+          <p>
+            An open-source, local-first macOS app for running coding agents against real repositories. Each workspace is an
+            isolated Git worktree with its own conversation, terminal, preview and review surface.
+          </p>
+        </div>
+        <a class="btn btn--outline" href={links.zeros} target="_blank" rel="noopener noreferrer">
+          View Zeros on GitHub <Icon name="arrow-external" />
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <section class="c-section c-explore" aria-labelledby="explore-title" data-carousel>
+    <span class="c-num" aria-hidden="true">05</span>
+    <div class="c-wide c-explore__head">
+      <h2 class="c-h2" id="explore-title">Explore Withso</h2>
+      <div class="c-explore__controls">
+        <button type="button" data-carousel-prev aria-label="Previous items" aria-controls="explore-track">
+          <Icon name="arrow-right" />
+        </button>
+        <button type="button" data-carousel-next aria-label="Next items" aria-controls="explore-track">
+          <Icon name="arrow-right" />
+        </button>
+      </div>
+    </div>
+    <ul class="c-track" id="explore-track" role="list" data-carousel-track>
+      {
+        stories.map((story) => (
+          <li class="c-story">
+            <a href={story.href} {...(story.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+              <div class:list={['c-story__art', story.light && 'c-story__art--light']}>
+                <StoryArt kind={story.art} />
+              </div>
+              <h3 class="c-story__title">{story.title}</h3>
+              <p class="c-story__meta">
+                {story.meta}
+                {story.external && <span class="visually-hidden"> (opens in a new tab)</span>}
+              </p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</CompanyLayout>

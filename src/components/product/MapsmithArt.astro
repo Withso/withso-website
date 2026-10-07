@@ -1,0 +1,323 @@
+---
+export type MapsmithArtKind = 'coverage' | 'assets' | 'observations' | 'public';
+
+interface Props {
+  kind: MapsmithArtKind;
+}
+
+const { kind } = Astro.props;
+
+// One sample geography shared by the illustrations and the interactive workspace. Not a real place.
+const ramp = ['#edf7f5', '#d2ece8', '#a9dcd5', '#7cc7bd', '#4fb0a4'];
+const wards = [
+  { d: 'M16 16H210L196 92L246 140L206 196L110 206L16 186Z', count: 1 },
+  { d: 'M210 16H382L366 74L392 150L318 182L246 140L196 92Z', count: 3 },
+  { d: 'M382 16H504V170L440 192L392 150L366 74Z', count: 2 },
+  { d: 'M16 186L110 206L206 196L246 140L318 182L334 304H16Z', count: 3 },
+  { d: 'M318 182L392 150L440 192L504 170V304H334Z', count: 1 },
+].map((ward) => ({ ...ward, fill: ramp[ward.count] }));
+const facilities = [
+  { x: 110, y: 170, c: '#20A39A' },
+  { x: 238, y: 64, c: '#10231F' },
+  { x: 296, y: 44, c: '#C9822F' },
+  { x: 334, y: 96, c: '#20A39A' },
+  { x: 430, y: 62, c: '#4B5FD3' },
+  { x: 474, y: 140, c: '#4B5FD3' },
+  { x: 60, y: 236, c: '#7C6CD6' },
+  { x: 132, y: 262, c: '#D3613D' },
+  { x: 250, y: 236, c: '#20A39A' },
+  { x: 420, y: 228, c: '#7C6CD6' },
+];
+const river = 'M6 112C64 100 112 152 180 146S280 104 338 128 452 200 514 186';
+
+const blocks = [28, 122, 228, 310, 416].flatMap((x, i) =>
+  [28, 88, 150, 236].map((y, j) => ({
+    x,
+    y,
+    w: [80, 92, 68, 92, 76][i],
+    h: [46, 48, 72, 56][j],
+  })),
+);
+const nodes = [
+  [60, 143],
+  [115, 143],
+  [115, 280],
+  [165, 143],
+  [221, 143],
+  [221, 40],
+  [262, 143],
+  [303, 143],
+  [303, 229],
+  [409, 143],
+  [409, 81],
+  [456, 229],
+];
+const flagged = [
+  [115, 229],
+  [360, 229],
+  [456, 143],
+];
+
+const quakes = [
+  [250, 62, 5],
+  [280, 92, 9],
+  [262, 128, 6],
+  [302, 142, 12],
+  [238, 172, 7],
+  [282, 198, 5],
+  [218, 216, 10],
+  [254, 248, 6],
+  [332, 232, 4],
+  [196, 266, 5],
+  [352, 80, 4],
+  [382, 152, 6],
+  [322, 182, 8],
+];
+const mono = 'font: 500 8.5px var(--font-mono); letter-spacing: .08em';
+const label = 'font: 500 9.5px var(--font-sans)';
+---
+
+{
+  kind === 'coverage' && (
+    <svg viewBox="0 0 520 320" aria-hidden="true" focusable="false">
+      <defs>
+        <clipPath id="ms-art-coverage">
+          <rect x="16" y="16" width="488" height="288" rx="8" />
+        </clipPath>
+      </defs>
+      <rect x="16" y="16" width="488" height="288" rx="8" fill="#eef3f2" />
+      <g clip-path="url(#ms-art-coverage)">
+        <g stroke="#fff" stroke-width="2" stroke-linejoin="round">
+          {wards.map((ward) => (
+            <path d={ward.d} fill={ward.fill} />
+          ))}
+        </g>
+        <path d={river} fill="none" stroke="#b9c8f3" stroke-width="12" stroke-linecap="round" />
+        <path d={river} fill="none" stroke="#8ea3ec" />
+        <g fill="#20A39A" opacity=".26">
+          {facilities.map((f) => (
+            <circle cx={f.x} cy={f.y} r="34" />
+          ))}
+        </g>
+        <g class="art-pulse" fill="none" stroke="#12756e" stroke-opacity=".55" stroke-dasharray="3 3">
+          {facilities.map((f) => (
+            <circle cx={f.x} cy={f.y} r="34" />
+          ))}
+        </g>
+        <g stroke="#fff" stroke-width="2">
+          {facilities.map((f) => (
+            <circle cx={f.x} cy={f.y} r="5" fill={f.c} />
+          ))}
+        </g>
+      </g>
+      <g transform="translate(30 30)">
+        <rect width="146" height="80" rx="6" fill="#fff" stroke="#dbe3e1" />
+        <text x="12" y="21" fill="#5f6c68" style={mono}>
+          FACILITIES PER WARD
+        </text>
+        {ramp.map((color, i) => (
+          <rect x={12 + i * 25} y="30" width="23" height="8" fill={color} />
+        ))}
+        <text x="12" y="51" fill="#5f6c68" style={mono}>
+          0
+        </text>
+        <text x="134" y="51" fill="#5f6c68" text-anchor="end" style={mono}>
+          4+
+        </text>
+        <circle cx="18" cy="66" r="5" fill="#20A39A" fill-opacity=".26" stroke="#12756e" stroke-opacity=".6" stroke-dasharray="2 2" />
+        <text x="30" y="69" fill="#26322f" style={label}>
+          Within 500 m of a facility
+        </text>
+      </g>
+    </svg>
+  )
+}
+{
+  kind === 'assets' && (
+    <svg viewBox="0 0 520 320" aria-hidden="true" focusable="false">
+      <defs>
+        <clipPath id="ms-art-assets">
+          <rect x="16" y="16" width="488" height="288" rx="8" />
+        </clipPath>
+      </defs>
+      <rect x="16" y="16" width="488" height="288" rx="8" fill="#f4f7f6" />
+      <g clip-path="url(#ms-art-assets)">
+        <g fill="#e5ecea">
+          {blocks.map((b) => (
+            <rect x={b.x} y={b.y} width={b.w} height={b.h} rx="3" />
+          ))}
+        </g>
+        <g fill="none" stroke="#4B5FD3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 143H504" stroke-width="3" />
+          <path d="M115 143V304M221 143V16M303 143V229H504M409 143V16" stroke-width="1.8" stroke-opacity=".75" />
+        </g>
+        <g fill="#fff" stroke="#4B5FD3" stroke-width="2">
+          {nodes.map(([x, y]) => (
+            <circle cx={x} cy={y} r="4" />
+          ))}
+        </g>
+        <g fill="#D3613D" stroke="#fff" stroke-width="2">
+          {flagged.map(([x, y]) => (
+            <circle cx={x} cy={y} r="5" />
+          ))}
+        </g>
+        <circle cx="221" cy="81" r="12" fill="#fff" stroke="#D3613D" stroke-width="2" />
+        <circle cx="221" cy="81" r="5" fill="#D3613D" />
+      </g>
+      <g>
+        <rect x="240" y="40" width="156" height="92" rx="7" fill="#fff" stroke="#dbe3e1" />
+        <path d="M240.5 73 233 81l7.5 8" fill="#fff" stroke="#dbe3e1" />
+        <text x="254" y="61" fill="#10231F" style="font: 600 11px var(--font-sans)">
+          Valve V-112
+        </text>
+        <text x="254" y="74" fill="#5f6c68" style={mono}>
+          WATER NETWORK · SAMPLE
+        </text>
+        <g fill="#5f6c68" style={label}>
+          <text x="254" y="96">Material</text>
+          <text x="254" y="110">Installed</text>
+          <text x="254" y="124">Status</text>
+        </g>
+        <g fill="#10231F" text-anchor="end" style="font: 500 9.5px var(--font-sans)">
+          <text x="384" y="96">Ductile iron</text>
+          <text x="384" y="110">2009</text>
+          <text x="384" y="124">Inspection due</text>
+        </g>
+        <circle cx="310" cy="121" r="3" fill="#D3613D" />
+      </g>
+      <g transform="translate(306 262)">
+        <rect width="184" height="28" rx="14" fill="#fff" stroke="#dbe3e1" />
+        <path d="M13 9h12l-4.5 5.5V20l-3-1.5v-4Z" fill="none" stroke="#10231F" stroke-width="1.2" stroke-linejoin="round" />
+        <text x="32" y="18" fill="#10231F" style={label}>
+          Status is Inspection due
+        </text>
+        <circle cx="170" cy="14" r="8" fill="#D3613D" />
+        <text x="170" y="17.5" fill="#fff" text-anchor="middle" style="font: 600 9px var(--font-sans)">
+          4
+        </text>
+      </g>
+    </svg>
+  )
+}
+{
+  kind === 'observations' && (
+    <svg viewBox="0 0 520 320" aria-hidden="true" focusable="false">
+      <defs>
+        <clipPath id="ms-art-observations">
+          <rect x="16" y="16" width="488" height="288" rx="8" />
+        </clipPath>
+        <radialGradient id="ms-art-heat">
+          <stop offset="0" stop-color="#4B5FD3" stop-opacity=".5" />
+          <stop offset=".45" stop-color="#20A39A" stop-opacity=".26" />
+          <stop offset="1" stop-color="#20A39A" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <rect x="16" y="16" width="488" height="288" rx="8" fill="#e7edf3" />
+      <g clip-path="url(#ms-art-observations)">
+        <g stroke="#10231F" stroke-opacity=".06">
+          <path d="M16 88H504M16 160H504M16 232H504M138 16V304M260 16V304M382 16V304" />
+        </g>
+        <path d="M16 16H318C296 52 312 84 286 112S292 170 262 198 270 262 240 304H16Z" fill="#f6f8f7" stroke="#d3ddda" />
+        <ellipse cx="262" cy="150" rx="88" ry="62" fill="url(#ms-art-heat)" />
+        <ellipse cx="292" cy="94" rx="58" ry="44" fill="url(#ms-art-heat)" />
+        <ellipse cx="226" cy="236" rx="60" ry="42" fill="url(#ms-art-heat)" />
+        <g fill="#4B5FD3" fill-opacity=".16" stroke="#4B5FD3" stroke-opacity=".75" stroke-width="1.2">
+          {quakes.map(([x, y, r]) => (
+            <circle cx={x} cy={y} r={r} />
+          ))}
+        </g>
+        <circle class="art-pulse" cx="302" cy="142" r="20" fill="none" stroke="#4B5FD3" stroke-opacity=".6" stroke-dasharray="2 3" />
+      </g>
+      <g transform="translate(30 228)">
+        <rect width="150" height="62" rx="6" fill="#fff" stroke="#dbe3e1" />
+        <text x="12" y="20" fill="#5f6c68" style={mono}>
+          MAGNITUDE
+        </text>
+        <g fill="#4B5FD3" fill-opacity=".16" stroke="#4B5FD3" stroke-opacity=".75" stroke-width="1.2">
+          <circle cx="20" cy="40" r="3" />
+          <circle cx="58" cy="40" r="6" />
+          <circle cx="102" cy="40" r="10" />
+        </g>
+        <g fill="#26322f" style={label}>
+          <text x="28" y="43.5">4</text>
+          <text x="69" y="43.5">5</text>
+          <text x="117" y="43.5">6+</text>
+        </g>
+      </g>
+      <g transform="translate(402 30)">
+        <rect width="88" height="26" rx="13" fill="#fff" stroke="#dbe3e1" />
+        <circle cx="16" cy="13" r="4" fill="url(#ms-art-heat)" stroke="#4B5FD3" stroke-opacity=".5" />
+        <text x="27" y="16.5" fill="#10231F" style={label}>
+          Heatmap
+        </text>
+      </g>
+    </svg>
+  )
+}
+{
+  kind === 'public' && (
+    <svg viewBox="0 0 520 320" aria-hidden="true" focusable="false">
+      <rect x="16.5" y="16.5" width="487" height="287" rx="8" fill="#fff" stroke="#dbe3e1" />
+      <path d="M17 43H503" stroke="#e2e7e5" />
+      <g fill="#dfe5e3">
+        <circle cx="32" cy="30" r="3.5" />
+        <circle cx="44" cy="30" r="3.5" />
+        <circle cx="56" cy="30" r="3.5" />
+      </g>
+      <rect x="176" y="22" width="168" height="16" rx="8" fill="#f3f6f5" />
+      <g fill="none" stroke="#5f6c68" stroke-width="1">
+        <circle cx="197" cy="30" r="4.5" />
+        <path d="M192.5 30h9M197 25.5c-2.4 2.6-2.4 6.4 0 9M197 25.5c2.4 2.6 2.4 6.4 0 9" />
+      </g>
+      <text x="207" y="33" fill="#5f6c68" style={label}>
+        Anyone with the link can view
+      </text>
+      <rect x="446" y="22" width="44" height="16" rx="8" fill="#e3f3f1" />
+      <text x="468" y="33" fill="#12756e" text-anchor="middle" style="font: 600 8px var(--font-mono); letter-spacing: .08em">
+        PUBLIC
+      </text>
+      <text x="32" y="68" fill="#10231F" style="font: 600 12px var(--font-sans)">
+        Service coverage
+      </text>
+      <text x="138" y="68" fill="#5f6c68" style={mono}>
+        SAMPLE DASHBOARD
+      </text>
+      <rect x="32" y="80" width="280" height="208" rx="6" fill="#eef3f2" />
+      <svg x="32" y="80" width="280" height="208" viewBox="60 16 400 288" preserveAspectRatio="xMidYMid slice">
+        <g stroke="#fff" stroke-width="2.5" stroke-linejoin="round">
+          {wards.map((ward) => (
+            <path d={ward.d} fill={ward.fill} />
+          ))}
+        </g>
+        <path d={river} fill="none" stroke="#b9c8f3" stroke-width="12" stroke-linecap="round" />
+        <g stroke="#fff" stroke-width="2.5">
+          {facilities.map((f) => (
+            <circle cx={f.x} cy={f.y} r="6" fill={f.c} />
+          ))}
+        </g>
+      </svg>
+      <g>
+        <rect x="324.5" y="80.5" width="77" height="57" rx="6" fill="#fff" stroke="#e2e7e5" />
+        <rect x="410.5" y="80.5" width="79" height="57" rx="6" fill="#fff" stroke="#e2e7e5" />
+        <g fill="#5f6c68" style={label}>
+          <text x="336" y="98">Facilities</text>
+          <text x="422" y="98">Wards</text>
+        </g>
+        <g fill="#10231F" style="font: 500 20px var(--font-sans); letter-spacing: -.02em">
+          <text x="336" y="126">10</text>
+          <text x="422" y="126">5</text>
+        </g>
+      </g>
+      <rect x="324.5" y="146.5" width="165" height="141" rx="6" fill="#fff" stroke="#e2e7e5" />
+      <text x="336" y="166" fill="#5f6c68" style={mono}>
+        FACILITIES PER WARD
+      </text>
+      {wards.map((ward, i) => (
+        <g transform={`translate(336 ${184 + i * 21})`}>
+          <rect width="138" height="8" rx="2" fill="#eef3f2" />
+          <rect width={(ward.count / 3) * 138} height="8" rx="2" fill="#20A39A" />
+        </g>
+      ))}
+    </svg>
+  )
+}

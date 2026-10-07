@@ -1,0 +1,30 @@
+---
+import Icon from './Icon.astro';
+import { social } from '../data/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<ul class:list={['social', className]} role="list" aria-label="Withso on the web">
+  {
+    social.map((item) => {
+      const external = item.href.startsWith('https://');
+      return (
+        <li>
+          <a
+            href={item.href}
+            aria-label={item.id === 'email' ? `Email Withso` : `Withso on ${item.label}`}
+            title={item.label}
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            <Icon name={item.id} />
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>

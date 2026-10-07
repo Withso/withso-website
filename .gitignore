@@ -1,7 +1,7 @@
 node_modules/
 out/
-__pycache__/
-*.pyc
+.astro/
+dist/
 .DS_Store
 .env
 .env.*
