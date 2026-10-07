@@ -44,6 +44,9 @@ Open `http://localhost:8000`. Clean page paths such as `/mapsmith` resolve to th
 - Styles and responsive layouts: `dist/assets/site.css`
 - Navigation, reveal effects and use-case tabs: `dist/assets/site.js`
 - Product brand marks: `dist/assets/mapsmith.svg` and `dist/assets/jurisfield.svg`
+- Company wordmark: `dist/assets/withso-logo.svg`
+- Original W mark: `dist/assets/withso-mark.jpg`
+- Browser and home-screen icons: `dist/favicon.ico`, `dist/assets/favicon-16.png`, `dist/assets/favicon-32.png` and `dist/assets/apple-touch-icon.png`
 - Route and accessibility checks: `scripts/validate_site.py`
 
 Generated HTML in `dist/` is checked in so the website can be served without a build step. Regenerate it after changing the generator. CSS, JavaScript and product assets are authored directly and preserved during generation.

@@ -1,15 +1,23 @@
 from pathlib import Path
 from html import escape
-from urllib.parse import quote
+from hashlib import sha256
 
 ROOT=Path(__file__).resolve().parents[1]
 DIST=ROOT/'dist'
 ORIGIN='https://withso.com'
 COMPANY='Withso Technologies (OPC) Private Limited'
 EMAIL='contact@withso.com'
-MARK='<svg class="brand-mark" viewBox="0 0 28 30" fill="none" aria-hidden="true"><path d="M2 7.5 8.2 23 14 11.5 19.8 23 26 7.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-FAVICON='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#eef3ee"/><path d="M7 12 13 28 20 16 27 28 33 12" fill="none" stroke="#304c3b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-FAVICON_URL='data:image/svg+xml,'+quote(FAVICON,safe='')
+def asset_url(path):
+    digest=sha256((DIST/path.lstrip('/')).read_bytes()).hexdigest()[:12]
+    return path+'?v='+digest
+
+LOGO=f'<img class="brand-logo" src="{asset_url("/assets/withso-logo.svg")}" width="871" height="217" alt="Withso">'
+FAVICONS=(
+    f'<link rel="icon" type="image/x-icon" href="{asset_url("/favicon.ico")}">'
+    f'<link rel="icon" type="image/png" sizes="32x32" href="{asset_url("/assets/favicon-32.png")}">'
+    f'<link rel="icon" type="image/png" sizes="16x16" href="{asset_url("/assets/favicon-16.png")}">'
+    f'<link rel="apple-touch-icon" sizes="180x180" href="{asset_url("/assets/apple-touch-icon.png")}">'
+)
 
 def link(path,text,css='text-link',external=False):
     return f'<a class="{css}" href="{escape(path,quote=True)}"'+(' target="_blank" rel="noopener noreferrer"' if external else '')+f'>{text}</a>'
@@ -22,14 +30,14 @@ def eyebrow(text):return f'<div class="eyebrow">{text}</div>'
 def header(route):
     items=[('/mapsmith','Mapsmith'),('/jurisfield','JurisField'),('/about','Company')]
     nav=''.join(f'<a href="{u}"'+(' aria-current="page"' if route==u else '')+f'>{label}</a>' for u,label in items)
-    return f'''<a class="skip" href="#main">Skip to content</a><header class="site-header"><div class="container nav"><a href="/" class="brand" aria-label="Withso home">{MARK}withso</a><button class="menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><span>Menu</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="1.5"/></svg></button><nav class="nav-links" id="main-navigation" aria-label="Main navigation">{nav}<a class="nav-contact" href="mailto:{EMAIL}">Get in touch</a></nav></div></header>'''
+    return f'''<a class="skip" href="#main">Skip to content</a><header class="site-header"><div class="container nav"><a href="/" class="brand" aria-label="Withso home">{LOGO}</a><button class="menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><span>Menu</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="1.5"/></svg></button><nav class="nav-links" id="main-navigation" aria-label="Main navigation">{nav}<a class="nav-contact" href="mailto:{EMAIL}">Get in touch</a></nav></div></header>'''
 
 def footer():
-    return f'''<footer class="site-footer"><div class="container"><div class="footer-main"><div class="footer-brand"><a href="/" class="brand" aria-label="Withso home">{MARK}withso</a><p>Geospatial software.<br>Built in India, for the world.</p></div><div class="footer-links"><div class="footer-column"><strong>Products</strong><a href="/mapsmith">Mapsmith</a><a href="/jurisfield">JurisField</a></div><div class="footer-column"><strong>Initiatives</strong><a href="https://nammatn.in/" target="_blank" rel="noopener noreferrer">NammaTN</a><a href="/#zeros">Zeros</a></div><div class="footer-column"><strong>Company</strong><a href="/about">About Withso</a><a href="mailto:{EMAIL}">Contact</a></div></div></div><div class="footer-bottom"><div class="footer-company">© 2026 {COMPANY}. All rights reserved.<br>Chennai, India · CIN U74103TN2025OPC177570</div><div class="footer-legal"><a href="/privacy">Privacy policy</a><a href="/terms">Terms &amp; conditions</a></div></div></div></footer>'''
+    return f'''<footer class="site-footer"><div class="container"><div class="footer-main"><div class="footer-brand"><a href="/" class="brand" aria-label="Withso home">{LOGO}</a><p>Geospatial software.<br>Built in India, for the world.</p></div><div class="footer-links"><div class="footer-column"><strong>Products</strong><a href="/mapsmith">Mapsmith</a><a href="/jurisfield">JurisField</a></div><div class="footer-column"><strong>Initiatives</strong><a href="https://nammatn.in/" target="_blank" rel="noopener noreferrer">NammaTN</a><a href="/#zeros">Zeros</a></div><div class="footer-column"><strong>Company</strong><a href="/about">About Withso</a><a href="mailto:{EMAIL}">Contact</a></div></div></div><div class="footer-bottom"><div class="footer-company">© 2026 {COMPANY}. All rights reserved.<br>Chennai, India · CIN U74103TN2025OPC177570</div><div class="footer-legal"><a href="/privacy">Privacy policy</a><a href="/terms">Terms &amp; conditions</a></div></div></div></footer>'''
 
 def page(route,title,description,body):
     canonical=ORIGIN+route
-    html=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><title>{escape(title)}</title><meta name="description" content="{escape(description,quote=True)}"><link rel="canonical" href="{canonical}"><meta property="og:type" content="website"><meta property="og:site_name" content="Withso"><meta property="og:title" content="{escape(title,quote=True)}"><meta property="og:description" content="{escape(description,quote=True)}"><meta property="og:url" content="{canonical}"><meta name="twitter:card" content="summary"><link rel="icon" type="image/svg+xml" href="{FAVICON_URL}"><link rel="stylesheet" href="/assets/site.css"><script src="/assets/site.js" defer></script></head><body>{header(route)}<main id="main">{body}</main>{footer()}</body></html>'''
+    html=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><title>{escape(title)}</title><meta name="description" content="{escape(description,quote=True)}"><link rel="canonical" href="{canonical}"><meta property="og:type" content="website"><meta property="og:site_name" content="Withso"><meta property="og:title" content="{escape(title,quote=True)}"><meta property="og:description" content="{escape(description,quote=True)}"><meta property="og:url" content="{canonical}"><meta name="twitter:card" content="summary">{FAVICONS}<link rel="stylesheet" href="/assets/site.css"><script src="/assets/site.js" defer></script></head><body>{header(route)}<main id="main">{body}</main>{footer()}</body></html>'''
     path=DIST/'index.html' if route=='/' else DIST/route.lstrip('/')/'index.html'
     path.parent.mkdir(parents=True,exist_ok=True);path.write_text(html)
 
